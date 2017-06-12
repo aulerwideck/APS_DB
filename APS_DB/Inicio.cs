@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace APS_DB
 {
-    public partial class Form1 : Form
+    public partial class Inicio : Form
     {
-        public Form1()
+        public Inicio()
         {
             InitializeComponent();
+        }
+
+        private void sairToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
