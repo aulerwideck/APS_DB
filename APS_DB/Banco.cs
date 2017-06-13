@@ -11,10 +11,10 @@ namespace APS_DB
 {
     class Banco
     {
-        private string ip = "108.179.253.205";
-        private string user = "trans548_rastrea";
-        private string senha = "515cp44r4r453cp";
-        private string db = "trans548_rastreador";
+        private string ip = "";
+        private string user = "";
+        private string senha = "";
+        private string db = "";
         private MySqlConnection mConn;
         private MySqlDataAdapter mAdapter;
         private DataTable dt;
