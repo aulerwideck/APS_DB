@@ -37,16 +37,6 @@ namespace APS_DB
 
         //inserts
 
-        public void run()
-        {
-            if (mConn.State == ConnectionState.Open)
-            {
-                dt = new DataTable();
-                mAdapter = new MySqlDataAdapter("SELECT * FROM ", mConn);
-                mAdapter.Fill(dt);
-            }
-        }
-            
             
               
     }
