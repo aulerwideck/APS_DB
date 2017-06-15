@@ -168,8 +168,42 @@ namespace APS_DB
             return null;
         }
         //inserts
+        public void insertFrete()
+        {
 
+        }
+        public void insertFreteVeiculo()
+        {
 
+        }
+        public void insertMarca()
+        {
+
+        }
+        public void insertModelo()
+        {
+
+        }
+        public void insertPessoa()
+        {
+
+        }
+        public void insertTelefone()
+        {
+
+        }
+        public void insertTipoPessoa()
+        {
+
+        }
+        public void insertTipoVeiculo()
+        {
+
+        }
+        public void insertVeiculo()
+        {
+
+        }
 
     }
 }
