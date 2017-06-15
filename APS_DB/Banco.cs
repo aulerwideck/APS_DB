@@ -49,6 +49,7 @@ namespace APS_DB
         public void abreConexao()
         {
             mConn = new MySqlConnection("Persist Security Info=False;server=" + ip + ";database=" + db + ";uid=" + user + ";server=" + ip + ";database=" + db + ";uid=" + user + ";pwd=" + senha);
+			mConn.Open();
         }
 
         public Boolean verificaConexao()
