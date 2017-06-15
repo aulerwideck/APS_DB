@@ -20,26 +20,26 @@ namespace APS_DB
 
         public string Ip
         {
-            get{return ip;}
-            set{ip = value;}
+            get { return ip; }
+            set { ip = value; }
         }
 
         public string User
         {
-            get{return user;}
-            set{user = value;}
+            get { return user; }
+            set { user = value; }
         }
 
         public string Senha
         {
-            get{return senha;}
-            set{senha = value;}
+            get { return senha; }
+            set { senha = value; }
         }
 
         public string Db
         {
-            get{ return db; }
-            set{db = value;}
+            get { return db; }
+            set { db = value; }
         }
 
         public void setIp(string ip)
@@ -48,7 +48,7 @@ namespace APS_DB
         }
         public void abreConexao()
         {
-            mConn = new MySqlConnection("Persist Security Info=False;server=" + ip + ";database="+db+";uid=" + user + ";server=" + ip + ";database=" + db + ";uid=" + user + ";pwd=" + senha);
+            mConn = new MySqlConnection("Persist Security Info=False;server=" + ip + ";database=" + db + ";uid=" + user + ";server=" + ip + ";database=" + db + ";uid=" + user + ";pwd=" + senha);
         }
 
         public Boolean verificaConexao()
@@ -180,7 +180,7 @@ namespace APS_DB
         }
         public DataTable getTipoVeiculo()
         {
-            if(verificaConexao())
+            if (verificaConexao())
             {
                 DataTable dt = new DataTable();
                 mAdapter = new MySqlDataAdapter("SELECT * FROM tipoVeiculo ", mConn);
@@ -201,25 +201,60 @@ namespace APS_DB
             return null;
         }
         //inserts
-        public void insertFrete()
+        public void insertFrete(int idRemetente, int idDestinatário, int idTomador, int idMotorista, int numCTE, DateTime dataEmissão, double vlCarga, double vlPedagio, double vlFrete, double pesoBruto)
         {
             if (verificaConexao())
             {
                 DataTable dt = new DataTable();
-                mAdapter = new MySqlDataAdapter("SELECT * FROM veiculo ", mConn);
+                mAdapter = new MySqlDataAdapter("INSERT INTO frete" +
+                                            "(`idPessoaRemetente`," +
+                                            "`idPessoaDestinario`," +
+                                            "`idPessoaTomador`," +
+                                            "`idPessoaMotorista`," +
+                                            "`NumeroCTe`," +
+                                            "`DataEmissao`," +
+                                            "`VlCarga`," +
+                                            "`VlPedagio`," +
+                                            "`VlFrete`," +
+                                            "`PesoBruto`," +
+                                            "`Finalizado`)" +
+                                            "VALUES(" +
+                                            idRemetente + "," +
+                                            idDestinatário + "," +
+                                            idTomador + "," +
+                                            idMotorista + "," +
+                                            numCTE + "," +
+                                            dataEmissão + "," +
+                                            vlCarga + "," +
+                                            vlPedagio + "," +
+                                            vlFrete + "," +
+                                            pesoBruto + "," +
+                                            "0); ", mConn);
             }
         }
-        public void insertFreteVeiculo()
+        public void insertFreteVeiculo(int idFrete, int idVeiculo)
         {
-
+            if (verificaConexao())
+            {
+                DataTable dt = new DataTable();
+                mAdapter = new MySqlDataAdapter("INSERT INTO frete_veiculo (`Frete_idFrete`,`Veiculo_idVeiculo`)VALUES(" + idFrete + "," + idVeiculo + ")", mConn);
+            }
         }
-        public void insertMarca()
+        public void insertMarca(string descricao)
         {
-
+            if (verificaConexao())
+            {
+                DataTable dt = new DataTable();
+                mAdapter = new MySqlDataAdapter("INSERT INTO marca (`Descricao`)VALUES(" + descricao + ")", mConn);
+            }
         }
-        public void insertModelo()
+        public void insertModelo(int idMarca,int idTipoVeiculo,string descricao)
         {
-
+            if (verificaConexao())
+            {
+                DataTable dt = new DataTable();
+                mAdapter = new MySqlDataAdapter("INSERT INTO modelo (`idMarca`,`idTipoVeiculo`,`Descricao`)VALUES("+idMarca+","+idTipoVeiculo+"," + descricao + ")", mConn);
+            }
         }
         public void insertPessoa()
         {
