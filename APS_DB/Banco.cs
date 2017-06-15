@@ -17,12 +17,26 @@ namespace APS_DB
         private string db = "";
         private MySqlConnection mConn;
         private MySqlDataAdapter mAdapter;
-        private DataTable dt;
         public void abreConexao()
         {
             mConn = new MySqlConnection("Persist Security Info=False;server=" + ip + ";database=;uid=" + user + ";server=" + ip + ";database=;uid=" + user + ";pwd=" + senha);
         }
         
+        //select ***
+        public DataTable getPaises()
+        {
+            if (mConn.State == ConnectionState.Open)
+            {
+                DataTable dt = new DataTable();
+                mAdapter = new MySqlDataAdapter("SELECT * FROM Pais ", mConn);
+                mAdapter.Fill(dt);
+                return dt;
+            }
+            return null;
+        }
+
+        //inserts
+
         public void run()
         {
             if (mConn.State == ConnectionState.Open)
