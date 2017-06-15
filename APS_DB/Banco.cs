@@ -256,25 +256,37 @@ namespace APS_DB
                 mAdapter = new MySqlDataAdapter("INSERT INTO modelo (`idMarca`,`idTipoVeiculo`,`Descricao`)VALUES("+idMarca+","+idTipoVeiculo+"," + descricao + ")", mConn);
             }
         }
-        public void insertPessoa()
+        public void insertPessoa(int idTipoPessoa,string nomeRS,int cpfCnpj,int RG,int IE,string email, DateTime nasc)
         {
-
+            if (verificaConexao())
+            {
+                DataTable dt = new DataTable();
+                mAdapter = new MySqlDataAdapter("INSERT INTO pessoa (`idTipoPessoa`,`RazaoSocial`,`CpfCpnj`,`RG`,`IE`,`Email`,`DataNasc`))VALUES("+idTipoPessoa+","+nomeRS+","+cpfCnpj+","+RG+","+IE+","+email+","+nasc+")", mConn);
+            }
         }
-        public void insertTelefone()
+        public void insertTelefone(int idPessoa,string telefone)
         {
-
+            if (verificaConexao())
+            {
+                DataTable dt = new DataTable();
+                mAdapter = new MySqlDataAdapter("INSERT INTO telefone (`idPessoa`,`Telefone`)VALUES(" + idPessoa + "," + telefone+")",mConn);
+            }
         }
-        public void insertTipoPessoa()
+        public void insertTipoVeiculo(string descricao)
         {
-
+            if (verificaConexao())
+            {
+                DataTable dt = new DataTable();
+                mAdapter = new MySqlDataAdapter("INSERT INTO TipoVeiculo (`Descricao`) VALUES ("  + descricao + ")", mConn);
+            }
         }
-        public void insertTipoVeiculo()
+        public void insertVeiculo(int idModelo,string descricao,string renavam,string placa, string tara, string capkg,string capm3)
         {
-
-        }
-        public void insertVeiculo()
-        {
-
+            if (verificaConexao())
+            {
+                DataTable dt = new DataTable();
+                mAdapter = new MySqlDataAdapter("INSERT INTO Veiculo (`idModelo`,`Descricao`,`Renavam`,`Placa`,`Tara`,`CapacidadeKg`,`CapacidadeM3`) VALUES ("+idModelo+"," + descricao + ","+renavam+","+placa+","+tara+","+capkg+","+capm3+")", mConn);
+            }
         }
 
     }

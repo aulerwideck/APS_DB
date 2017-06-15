@@ -23,6 +23,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`TipoPessoa` (
   PRIMARY KEY (`idTipoPessoa`))
 ENGINE = InnoDB;
 
+INSERT INTO `TipoPessoa` (`Descricao`) VALUES ('Pessoa Física');
+INSERT INTO `TipoPessoa` (`Descricao`) VALUES ('Pessoa Jurídica');
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Pessoa`
@@ -5779,10 +5781,13 @@ ENGINE = InnoDB;
 -- Table `mydb`.`TipoVeiculo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`TipoVeiculo` (
-  `idTipoVeiculo` INT NOT NULL,
+  `idTipoVeiculo` INT NOT NULL AUTO_INCREMENT,
   `Descricao` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idTipoVeiculo`))
 ENGINE = InnoDB;
+
+INSERT INTO `TipoVeiculo` (`Descricao`) VALUES ('Tração');
+INSERT INTO `TipoVeiculo` (`Descricao`) VALUES ('Reboque');
 
 
 -- -----------------------------------------------------
