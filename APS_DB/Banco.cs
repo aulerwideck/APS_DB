@@ -17,15 +17,48 @@ namespace APS_DB
         private string db = "";
         private MySqlConnection mConn;
         private MySqlDataAdapter mAdapter;
-        public void abreConexao()
+
+        public string Ip
         {
-            mConn = new MySqlConnection("Persist Security Info=False;server=" + ip + ";database=;uid=" + user + ";server=" + ip + ";database=;uid=" + user + ";pwd=" + senha);
+            get{return ip;}
+            set{ip = value;}
         }
 
+        public string User
+        {
+            get{return user;}
+            set{user = value;}
+        }
+
+        public string Senha
+        {
+            get{return senha;}
+            set{senha = value;}
+        }
+
+        public string Db
+        {
+            get{ return db; }
+            set{db = value;}
+        }
+
+        public void setIp(string ip)
+        {
+            this.ip = ip;
+        }
+        public void abreConexao()
+        {
+            mConn = new MySqlConnection("Persist Security Info=False;server=" + ip + ";database="+db+";uid=" + user + ";server=" + ip + ";database=" + db + ";uid=" + user + ";pwd=" + senha);
+        }
+
+        public Boolean verificaConexao()
+        {
+            return mConn.State == ConnectionState.Open;
+        }
         //select ***
         public DataTable getCidades()
         {
-            if (mConn.State == ConnectionState.Open)
+            if (verificaConexao())
             {
                 DataTable dt = new DataTable();
                 mAdapter = new MySqlDataAdapter("SELECT * FROM cidade", mConn);
@@ -36,7 +69,7 @@ namespace APS_DB
         }
         public DataTable getEnderecos()
         {
-            if (mConn.State == ConnectionState.Open)
+            if (verificaConexao())
             {
                 DataTable dt = new DataTable();
                 mAdapter = new MySqlDataAdapter("SELECT * FROM endereco", mConn);
@@ -47,7 +80,7 @@ namespace APS_DB
         }
         public DataTable getEstados()
         {
-            if (mConn.State == ConnectionState.Open)
+            if (verificaConexao())
             {
                 DataTable dt = new DataTable();
                 mAdapter = new MySqlDataAdapter("SELECT * FROM estado", mConn);
@@ -58,7 +91,7 @@ namespace APS_DB
         }
         public DataTable getFretes()
         {
-            if (mConn.State == ConnectionState.Open)
+            if (verificaConexao())
             {
                 DataTable dt = new DataTable();
                 mAdapter = new MySqlDataAdapter("SELECT * FROM frete", mConn);
@@ -69,7 +102,7 @@ namespace APS_DB
         }
         public DataTable getFrete_Veiculo()
         {
-            if (mConn.State == ConnectionState.Open)
+            if (verificaConexao())
             {
                 DataTable dt = new DataTable();
                 mAdapter = new MySqlDataAdapter("SELECT * FROM frete_veiculo ", mConn);
@@ -80,7 +113,7 @@ namespace APS_DB
         }
         public DataTable getMarca()
         {
-            if (mConn.State == ConnectionState.Open)
+            if (verificaConexao())
             {
                 DataTable dt = new DataTable();
                 mAdapter = new MySqlDataAdapter("SELECT * FROM marca ", mConn);
@@ -92,7 +125,7 @@ namespace APS_DB
 
         public DataTable getModeelos()
         {
-            if (mConn.State == ConnectionState.Open)
+            if (verificaConexao())
             {
                 DataTable dt = new DataTable();
                 mAdapter = new MySqlDataAdapter("SELECT * FROM modelo ", mConn);
@@ -103,7 +136,7 @@ namespace APS_DB
         }
         public DataTable getPaises()
         {
-            if (mConn.State == ConnectionState.Open)
+            if (verificaConexao())
             {
                 DataTable dt = new DataTable();
                 mAdapter = new MySqlDataAdapter("SELECT * FROM pais ", mConn);
@@ -114,7 +147,7 @@ namespace APS_DB
         }
         public DataTable getPessoa()
         {
-            if (mConn.State == ConnectionState.Open)
+            if (verificaConexao())
             {
                 DataTable dt = new DataTable();
                 mAdapter = new MySqlDataAdapter("SELECT * FROM pessoa ", mConn);
@@ -125,7 +158,7 @@ namespace APS_DB
         }
         public DataTable getTelefone()
         {
-            if (mConn.State == ConnectionState.Open)
+            if (verificaConexao())
             {
                 DataTable dt = new DataTable();
                 mAdapter = new MySqlDataAdapter("SELECT * FROM telefone ", mConn);
@@ -136,7 +169,7 @@ namespace APS_DB
         }
         public DataTable getTipoPessoa()
         {
-            if (mConn.State == ConnectionState.Open)
+            if (verificaConexao())
             {
                 DataTable dt = new DataTable();
                 mAdapter = new MySqlDataAdapter("SELECT * FROM tipoPessoa ", mConn);
@@ -147,7 +180,7 @@ namespace APS_DB
         }
         public DataTable getTipoVeiculo()
         {
-            if (mConn.State == ConnectionState.Open)
+            if(verificaConexao())
             {
                 DataTable dt = new DataTable();
                 mAdapter = new MySqlDataAdapter("SELECT * FROM tipoVeiculo ", mConn);
@@ -158,7 +191,7 @@ namespace APS_DB
         }
         public DataTable getVeiculos()
         {
-            if (mConn.State == ConnectionState.Open)
+            if (verificaConexao())
             {
                 DataTable dt = new DataTable();
                 mAdapter = new MySqlDataAdapter("SELECT * FROM veiculo ", mConn);
@@ -170,7 +203,11 @@ namespace APS_DB
         //inserts
         public void insertFrete()
         {
-
+            if (verificaConexao())
+            {
+                DataTable dt = new DataTable();
+                mAdapter = new MySqlDataAdapter("SELECT * FROM veiculo ", mConn);
+            }
         }
         public void insertFreteVeiculo()
         {
