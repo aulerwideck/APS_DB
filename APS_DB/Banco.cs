@@ -288,6 +288,14 @@ namespace APS_DB
                 mAdapter = new MySqlDataAdapter("INSERT INTO Veiculo (`idModelo`,`Descricao`,`Renavam`,`Placa`,`Tara`,`CapacidadeKg`,`CapacidadeM3`) VALUES ("+idModelo+"," + descricao + ","+renavam+","+placa+","+tara+","+capkg+","+capm3+")", mConn);
             }
         }
-
+        // UPDATES
+        public void finalizaFrete(int idFrete,DateTime datafim)
+        {
+            if (verificaConexao())
+            {
+                DataTable dt = new DataTable();
+                mAdapter = new MySqlDataAdapter("UPDATE frete SET DataEntrega = "+datafim+" where idfrete = "+idFrete, mConn);
+            }
+        }
     }
 }
