@@ -119,6 +119,7 @@ namespace APS_DB
 			btn.Location = new Point(bx + 4 * of, 0);
 			btn.Size = new Size(of - 10, 23);
 			btn.Text = "Limpar Campos";
+			btn.Click += limparCampos;
 			pnl.Controls.Add(btn);
 
 
@@ -162,7 +163,14 @@ namespace APS_DB
 				column.SortMode = DataGridViewColumnSortMode.NotSortable;
 			}
 		}
-
+		private void limparCampos(object sender, EventArgs e)
+		{
+			var m = meta[current];
+			foreach (var item in m)
+			{
+				item.Controle.Text = string.Empty;
+			}
+		}
 		private void pessoasToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			showSearchPanel("Pessoa");
