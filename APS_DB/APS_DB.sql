@@ -46,6 +46,27 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Pessoa` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+insert into pessoa (`idTipoPessoa`,`RazaoSocial`,`CpfCpnj`,`RG`,`IE`,`Email`,`DataNasc`) Values
+(1,"a","1","1","","a@a.com","01/01/02"),
+(1,"b","1","1","","a@a.com","01/01/02"),
+(1,"c","1","1","","a@a.com","01/01/03"),
+(1,"d","1","1","","a@a.com","01/01/04"),
+(1,"e","1","1","","a@a.com","01/01/05"),
+(1,"f","1","1","","a@a.com","01/01/06"),
+(1,"g","1","1","","a@a.com","01/01/07"),
+(1,"h","1","1","","a@a.com","01/01/08"),
+(1,"i","1","1","","a@a.com","01/01/09"),
+(1,"j","1","1","","a@a.com","01/01/10"),
+(1,"k","1","1","","a@a.com","01/01/11"),
+(2,"l","1","","1","a@a.com","01/01/12"),
+(2,"m","1","","1","a@a.com","01/01/13"),
+(2,"n","1","","1","a@a.com","01/01/14"),
+(2,"o","1","","1","a@a.com","01/01/15"),
+(2,"p","1","","1","a@a.com","01/01/16"),
+(2,"q","1","","1","a@a.com","01/01/17"),
+(2,"r","1","","1","a@a.com","01/01/18"),
+(2,"s","1","","1","a@a.com","01/01/19"),
+(2,"t","1","","1","a@a.com","01/01/20");
 
 
 -- -----------------------------------------------------
@@ -5698,7 +5719,7 @@ INSERT INTO `cidade` (`id`, `nome`, `estado`) VALUES
 -- Table `mydb`.`Endereco`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Endereco` (
-  `idEndereco` INT NOT NULL,
+  `idEndereco` INT NOT NULL AUTO_INCREMENT,
   `idPessoa` INT NOT NULL,
   `idCidade` INT NOT NULL,
   `Rua` VARCHAR(45) NOT NULL,
@@ -5721,6 +5742,27 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Endereco` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+insert into endereco (`idPessoa`,`idCidade`,`Rua`,`Numero`,`Complemento`,`Bairro`,`CEP`) Values
+(1,1,"1",1,"perto","centro","01/01/01"),
+(2,2,"1",1,"perto","centro","01/01/02"),
+(3,3,"1",1,"perto","centro","01/01/03"),
+(4,4,"1",1,"perto","centro","01/01/04"),
+(5,5,"1",1,"perto","centro","01/01/05"),
+(6,6,"1",1,"perto","centro","01/01/06"),
+(7,7,"1",1,"perto","centro","01/01/07"),
+(8,8,"1",1,"perto","centro","01/01/08"),
+(9,9,"1",1,"perto","centro","01/01/09"),
+(10,10,"1",1,"perto","centro","01/01/10"),
+(11,11,"1",1,"perto","centro","01/01/11"),
+(12,12,"1",1,"perto","centro","01/01/12"),
+(13,13,"1",1,"perto","centro","01/01/13"),
+(14,14,"1",1,"perto","centro","01/01/14"),
+(15,15,"1",1,"perto","centro","01/01/15"),
+(16,16,"1",1,"perto","centro","01/01/16"),
+(17,17,"1",1,"perto","centro","01/01/17"),
+(18,18,"1",1,"perto","centro","01/01/18"),
+(19,19,"1",1,"perto","centro","01/01/19"),
+(20,20,"1",1,"perto","centro","01/01/20");
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Frete`
@@ -5765,6 +5807,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Frete` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+INSERT INTO frete(`idPessoaRemetente`,`idPessoaDestinario`,`idPessoaTomador`,`idPessoaMotorista`,`NumeroCTe`,`DataEmissao`,`VlCarga`,`VlPedagio`,`VlFrete`,`PesoBruto`,`Finalizado`)values
+(1,2,3,4,1,"01-01-01",10000,100,1000,500,0),
+(5,6,7,8,2,"01-01-02",10000,100,1000,500,0);
+INSERT INTO `mydb`.`frete`(`idPessoaRemetente`,`idPessoaDestinario`,`idPessoaTomador`,`idPessoaMotorista`,`NumeroCTe`,`DataEmissao`,`DataEntrega`,`VlCarga`,`VlPedagio`,`VlFrete`,`PesoBruto`,`Finalizado`)values
+(9,10,11,12,3,"01-01-03","02-02-02",10000,100,1000,500,0),
+(13,14,15,16,4,"01-01-03","02-02-02",10000,100,1000,500,0);
 
 
 -- -----------------------------------------------------
@@ -5775,7 +5823,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Marca` (
   `Descricao` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idMarca`))
 ENGINE = InnoDB;
-
+insert into marca (`Descricao`) values
+("Volvo"),
+("Mercedes-Benz"),
+("Iveco"),
+("Niju"),
+("Guerra"),
+("Recrusul");
 
 -- -----------------------------------------------------
 -- Table `mydb`.`TipoVeiculo`
@@ -5812,8 +5866,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Modelo` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-
+insert into modelo(`idMarca`,`idTipoVeiculo`,`Descricao`) values
+(1,1,"440cv"),
+(2,1,"420cv"),
+(3,1,"380cv"),
+(4,2,"28 Pallet"),
+(5,2,"30 Pallet"),
+(6,2,"32 Pallet");
 -- -----------------------------------------------------
 -- Table `mydb`.`Veiculo`
 -- -----------------------------------------------------
@@ -5834,13 +5893,19 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Veiculo` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
+INSERT INTO veiculo (`idModelo`,`Descricao`,`Renavam`,`Placa`,`Tara`,`CapacidadeKg`,`CapacidadeM3`)VALUES
+(1,"cavalo","1234","abc-1234","35000","",""),
+(2,"cavalo","123456","abc-1235","35000","",""),
+(3,"cavalo","12345678","abc-1236","35000","",""),
+(4,"carreta","1","abc-1237","","28000","28"),
+(5,"carreta","12","abc-1238","","30000","30"),
+(6,"carreta","123","abc-1239","","32000","32");
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Telefone`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Telefone` (
-  `idTelefone` INT NOT NULL,
+  `idTelefone` INT NOT NULL AUTO_INCREMENT,
   `idPessoa` INT NOT NULL,
   `Telefone` VARCHAR(15) NOT NULL,
   PRIMARY KEY (`idTelefone`),
@@ -5851,7 +5916,17 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Telefone` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
+insert into telefone (`idPessoa`,`Telefone`) values
+(1,"1"),
+(2,"12"),
+(3,"123"),
+(4,"1234"),
+(5,"12345"),
+(6,"123456"),
+(7,"1234567"),
+(8,"12345678"),
+(9,"123456789"),
+(10,"1234567890");
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Frete_Veiculo`
@@ -5872,7 +5947,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Frete_Veiculo` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
+insert into frete_veiculo (`Frete_idFrete`,`Veiculo_idVeiculo`) values
+(1,1),
+(1,4),
+(2,2),
+(2,5),
+(3,3),
+(3,6);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
