@@ -56,7 +56,18 @@ namespace APS_DB
         {
             return mConn.State == ConnectionState.Open;
         }
-        //select ***
+		//select ***
+		public DataTable get(string table)
+		{
+			if (verificaConexao())
+			{
+				DataTable dt = new DataTable();
+				mAdapter = new MySqlDataAdapter(string.Format("SELECT * FROM {0} ", table) , mConn);
+				mAdapter.Fill(dt);
+				return dt;
+			}
+			return null;
+		}
         public DataTable getCidades()
         {
             if (verificaConexao())

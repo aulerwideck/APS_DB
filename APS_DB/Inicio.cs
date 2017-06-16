@@ -144,7 +144,7 @@ namespace APS_DB
 		{
 			var m = meta[current];
 			var sf = forms[current];
-			var res = banco.getTipoPessoa();
+			var res = banco.get(current);
 			sf.Dgv.DataSource = res;
 			foreach (DataGridViewColumn column in sf.Dgv.Columns)
 			{
