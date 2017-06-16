@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Banco.cs" />
+    <Compile Include="Classes\FieldType.cs" />
     <Compile Include="Classes\searchElement.cs" />
     <Compile Include="Classes\searchForm.cs" />
     <Compile Include="Inicio.cs">

@@ -111,8 +111,14 @@ namespace APS_DB
 
 			btn = new Button();
 			btn.Location = new Point(bx + 3 * of, 0);
-			btn.Size = new Size(of - 10, 23); 
+			btn.Size = new Size(of - 10, 23);
 			btn.Text = "Remover";
+			pnl.Controls.Add(btn);
+
+			btn = new Button();
+			btn.Location = new Point(bx + 4 * of, 0);
+			btn.Size = new Size(of - 10, 23);
+			btn.Text = "Limpar Campos";
 			pnl.Controls.Add(btn);
 
 
@@ -144,7 +150,12 @@ namespace APS_DB
 		{
 			var m = meta[current];
 			var sf = forms[current];
-			var res = banco.get(current);
+			var where = new List<KeyValuePair<string, string>>();
+			foreach (var item in m)
+			{
+				if (!string.IsNullOrEmpty(item.Controle.Text)) where.Add(new KeyValuePair<string, string>(item.NomeColuna, item.Controle.Text));
+			}
+			var res = banco.get(current, where);
 			sf.Dgv.DataSource = res;
 			foreach (DataGridViewColumn column in sf.Dgv.Columns)
 			{

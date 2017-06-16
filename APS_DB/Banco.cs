@@ -57,12 +57,23 @@ namespace APS_DB
             return mConn.State == ConnectionState.Open;
         }
 		//select ***
-		public DataTable get(string table)
+		public DataTable get(string table, List<KeyValuePair<string, string>> where = null)
 		{
 			if (verificaConexao())
 			{
 				DataTable dt = new DataTable();
-				mAdapter = new MySqlDataAdapter(string.Format("SELECT * FROM {0} ", table) , mConn);
+				var query = new StringBuilder();
+				query.Append(string.Format("SELECT * FROM {0} ", table));
+				if (where != null && where.Count > 0)
+				{
+					query.Append("WHERE ");
+					query.Append(string.Format("{0} = \"{1}\" ", where[0].Key, where[0].Value));
+					for (int i = 1; i < where.Count; i++)
+					{
+						query.Append(string.Format("AND {0} = \"{1}\" ", where[i].Key, where[i].Value));
+					}
+				}
+				mAdapter = new MySqlDataAdapter(query.ToString(), mConn);
 				mAdapter.Fill(dt);
 				return dt;
 			}
