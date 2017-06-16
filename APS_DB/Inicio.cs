@@ -64,36 +64,46 @@ namespace APS_DB
 			sf.Name = name;
 			var data = meta[name];
 			sf.Panel = new FlowLayoutPanel();
-			sf.Panel.Location = new Point(60, 60);
+			sf.Panel.Anchor = AnchorStyles.Top;
+			sf.Panel.Location = new Point(0, 24);
+			sf.Panel.Padding = new Padding(10);
 			sf.Panel.Dock = DockStyle.Fill;
 			sf.Panel.Visible = true;
-			sf.Panel.FlowDirection = FlowDirection.TopDown;
+			sf.Panel.FlowDirection = FlowDirection.LeftToRight;
 			for (int i = 0; i < data.Length; i++)
 			{
 				var subpnl = new Panel();
-				subpnl.Size = new Size(510, 28);
+				subpnl.Size = new Size(400, 28);
 				var label = new Label();
 				label.Location = new Point(3, 6);
 				label.Text = data[i].NomeColuna;
 				var text = new TextBox();
 				data[i].Controle = text;
 				text.Name = "pesquisa" + data[i];
-				text.Location = new Point(200, 3);
+				text.Location = new Point(100, 3);
 				text.Size = new Size(300, 20);
 				subpnl.Controls.Add(label);
 				subpnl.Controls.Add(text);
 				sf.Panel.Controls.Add(subpnl);
 			}
+			var pnl = new Panel();
+			pnl.Size = new Size(1020, 28);
 			var btn = new Button();
 			btn.Text = "Pesquisar";
 			btn.Click += pesquisar;
-			sf.Panel.Controls.Add(btn);
+			pnl.Controls.Add(btn);
+			sf.Panel.Controls.Add(pnl);
 
+			pnl = new Panel();
+			pnl.Size = new Size(800, 480);
 			sf.Dgv = new DataGridView();
-			sf.Panel.Controls.Add(sf.Dgv);
+			sf.Dgv.Size = new Size(800, 480);
+			sf.Dgv.Dock = DockStyle.Fill;
+			pnl.Controls.Add(sf.Dgv);
+			sf.Panel.Controls.Add(pnl);
 			sf.Panel.Visible = false;
 			forms.Add(name, sf);
-			Controls.Add(sf.Panel);
+			mainPanel.Controls.Add(sf.Panel);
 		}
 
 		private void pesquisar(object sender, EventArgs e)

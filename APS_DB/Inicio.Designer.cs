@@ -35,6 +35,7 @@
 			this.relatóriosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.sairToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tipoPessoaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mainPanel = new System.Windows.Forms.Panel();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -46,7 +47,7 @@
             this.sairToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(1218, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(842, 24);
 			this.menuStrip1.TabIndex = 0;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -94,14 +95,26 @@
 			this.tipoPessoaToolStripMenuItem.Text = "Tipo Pessoa";
 			this.tipoPessoaToolStripMenuItem.Click += new System.EventHandler(this.tipoPessoaToolStripMenuItem_Click);
 			// 
+			// mainPanel
+			// 
+			this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.mainPanel.Location = new System.Drawing.Point(0, 24);
+			this.mainPanel.Name = "mainPanel";
+			this.mainPanel.Size = new System.Drawing.Size(842, 699);
+			this.mainPanel.TabIndex = 1;
+			// 
 			// Inicio
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1218, 749);
+			this.ClientSize = new System.Drawing.Size(842, 723);
+			this.Controls.Add(this.mainPanel);
 			this.Controls.Add(this.menuStrip1);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MainMenuStrip = this.menuStrip1;
+			this.MaximizeBox = false;
 			this.Name = "Inicio";
+			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "APS - Banco de Dados";
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
@@ -119,5 +132,6 @@
         private System.Windows.Forms.ToolStripMenuItem pessoasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem veíToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem tipoPessoaToolStripMenuItem;
+		private System.Windows.Forms.Panel mainPanel;
 	}
 }
