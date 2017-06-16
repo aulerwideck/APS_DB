@@ -36,6 +36,15 @@
 			this.sairToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tipoPessoaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mainPanel = new System.Windows.Forms.Panel();
+			this.cidadesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.endereçosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.estadosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.fretesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.marcasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.modelosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.paísesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.telefonesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.tipoVeículosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -54,9 +63,18 @@
 			// gerenciarToolStripMenuItem
 			// 
 			this.gerenciarToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cidadesToolStripMenuItem,
+            this.endereçosToolStripMenuItem,
+            this.estadosToolStripMenuItem,
+            this.fretesToolStripMenuItem,
+            this.marcasToolStripMenuItem,
+            this.modelosToolStripMenuItem,
+            this.paísesToolStripMenuItem,
             this.pessoasToolStripMenuItem,
-            this.veíToolStripMenuItem,
-            this.tipoPessoaToolStripMenuItem});
+            this.telefonesToolStripMenuItem,
+            this.tipoPessoaToolStripMenuItem,
+            this.tipoVeículosToolStripMenuItem,
+            this.veíToolStripMenuItem});
 			this.gerenciarToolStripMenuItem.Name = "gerenciarToolStripMenuItem";
 			this.gerenciarToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
 			this.gerenciarToolStripMenuItem.Text = "Gerenciar";
@@ -103,6 +121,69 @@
 			this.mainPanel.Size = new System.Drawing.Size(842, 699);
 			this.mainPanel.TabIndex = 1;
 			// 
+			// cidadesToolStripMenuItem
+			// 
+			this.cidadesToolStripMenuItem.Name = "cidadesToolStripMenuItem";
+			this.cidadesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.cidadesToolStripMenuItem.Text = "Cidades";
+			this.cidadesToolStripMenuItem.Click += new System.EventHandler(this.cidadesToolStripMenuItem_Click);
+			// 
+			// endereçosToolStripMenuItem
+			// 
+			this.endereçosToolStripMenuItem.Name = "endereçosToolStripMenuItem";
+			this.endereçosToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.endereçosToolStripMenuItem.Text = "Endereços";
+			this.endereçosToolStripMenuItem.Click += new System.EventHandler(this.endereçosToolStripMenuItem_Click);
+			// 
+			// estadosToolStripMenuItem
+			// 
+			this.estadosToolStripMenuItem.Name = "estadosToolStripMenuItem";
+			this.estadosToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.estadosToolStripMenuItem.Text = "Estados";
+			this.estadosToolStripMenuItem.Click += new System.EventHandler(this.estadosToolStripMenuItem_Click);
+			// 
+			// fretesToolStripMenuItem
+			// 
+			this.fretesToolStripMenuItem.Name = "fretesToolStripMenuItem";
+			this.fretesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.fretesToolStripMenuItem.Text = "Fretes";
+			this.fretesToolStripMenuItem.Click += new System.EventHandler(this.fretesToolStripMenuItem_Click);
+			// 
+			// marcasToolStripMenuItem
+			// 
+			this.marcasToolStripMenuItem.Name = "marcasToolStripMenuItem";
+			this.marcasToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.marcasToolStripMenuItem.Text = "Marcas";
+			this.marcasToolStripMenuItem.Click += new System.EventHandler(this.marcasToolStripMenuItem_Click);
+			// 
+			// modelosToolStripMenuItem
+			// 
+			this.modelosToolStripMenuItem.Name = "modelosToolStripMenuItem";
+			this.modelosToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.modelosToolStripMenuItem.Text = "Modelos";
+			this.modelosToolStripMenuItem.Click += new System.EventHandler(this.modelosToolStripMenuItem_Click);
+			// 
+			// paísesToolStripMenuItem
+			// 
+			this.paísesToolStripMenuItem.Name = "paísesToolStripMenuItem";
+			this.paísesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.paísesToolStripMenuItem.Text = "Países";
+			this.paísesToolStripMenuItem.Click += new System.EventHandler(this.paísesToolStripMenuItem_Click);
+			// 
+			// telefonesToolStripMenuItem
+			// 
+			this.telefonesToolStripMenuItem.Name = "telefonesToolStripMenuItem";
+			this.telefonesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.telefonesToolStripMenuItem.Text = "Telefones";
+			this.telefonesToolStripMenuItem.Click += new System.EventHandler(this.telefonesToolStripMenuItem_Click);
+			// 
+			// tipoVeículosToolStripMenuItem
+			// 
+			this.tipoVeículosToolStripMenuItem.Name = "tipoVeículosToolStripMenuItem";
+			this.tipoVeículosToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.tipoVeículosToolStripMenuItem.Text = "Tipo Veículos";
+			this.tipoVeículosToolStripMenuItem.Click += new System.EventHandler(this.tipoVeículosToolStripMenuItem_Click);
+			// 
 			// Inicio
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -133,5 +214,14 @@
         private System.Windows.Forms.ToolStripMenuItem veíToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem tipoPessoaToolStripMenuItem;
 		private System.Windows.Forms.Panel mainPanel;
+		private System.Windows.Forms.ToolStripMenuItem cidadesToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem endereçosToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem estadosToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem fretesToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem marcasToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem modelosToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem paísesToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem telefonesToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem tipoVeículosToolStripMenuItem;
 	}
 }

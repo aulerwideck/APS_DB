@@ -24,12 +24,18 @@ namespace APS_DB
             InitializeComponent();
 
 			//Metadados de tabelas.
-			meta.Add("TipoPessoa", new searchElement[] { new searchElement("idTipoPessoa"), new searchElement("Descricao") });
-			meta.Add("Pessoa", new searchElement[] { new searchElement("idPessoa"), new searchElement("idTipoPessoa"), new searchElement("RazaoSocial"), new searchElement("CpfCnpj"), new searchElement("RG"), new searchElement("IE"), new searchElement("Email"), new searchElement("DataNasc") });
-			meta.Add("Veiculo", new searchElement[] { new searchElement("idVeiculo"), new searchElement("idModelo") });
-			//meta.Add("Veiculo", new searchElement[] { new searchElement("idVeiculo"), new searchElement("idModelo") });
-			//meta.Add("Veiculo", new searchElement[] { new searchElement("idVeiculo"), new searchElement("idModelo") });
-			//meta.Add("Veiculo", new searchElement[] { new searchElement("idVeiculo"), new searchElement("idModelo") });
+			meta.Add("cidade", new searchElement[] { new searchElement("nome") });
+			meta.Add("endereco", new searchElement[] { new searchElement("Rua"), new searchElement("Numero"), new searchElement("Complemento"), new searchElement("Bairro"), new searchElement("CEP") });
+			meta.Add("estado", new searchElement[] { new searchElement("Sigla"), new searchElement("Nome") });
+			meta.Add("frete", new searchElement[] { new searchElement("NumeroCTe") });
+			meta.Add("marca", new searchElement[] { new searchElement("Descricao") });
+			meta.Add("modelo", new searchElement[] { new searchElement("Descricao") });
+			meta.Add("pais", new searchElement[] { new searchElement("Sigla"), new searchElement("Nome") });
+			meta.Add("pessoa", new searchElement[] { new searchElement("RazaoSocial"), new searchElement("CpfCnpj"), new searchElement("RG"), new searchElement("IE"), new searchElement("Email"), new searchElement("DataNasc") });
+			meta.Add("telefone", new searchElement[] { new searchElement("Telefone") });
+			meta.Add("tipopessoa", new searchElement[] { new searchElement("Descricao") });
+			meta.Add("tipoveiculo", new searchElement[] { new searchElement("Descricao") });
+			meta.Add("veiculo", new searchElement[] { new searchElement("Descricao"), new searchElement("Renavam"), new searchElement("Placa"), new searchElement("Tara") });
 
 			//Configuração de conexão.
 			banco = new Banco();
@@ -174,17 +180,54 @@ namespace APS_DB
 				item.Controle.Text = string.Empty;
 			}
 		}
+
+		private void cidadesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			showSearchPanel("cidade");
+		}
+		private void endereçosToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			showSearchPanel("endereco");
+		}
+		private void estadosToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			showSearchPanel("estado");
+		}
+		private void fretesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			showSearchPanel("frete");
+		}
+		private void marcasToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			showSearchPanel("marca");
+		}
+		private void modelosToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			showSearchPanel("modelo");
+		}
+		private void paísesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			showSearchPanel("pais");
+		}
 		private void pessoasToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			showSearchPanel("Pessoa");
+			showSearchPanel("pessoa");
+		}
+		private void telefonesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			showSearchPanel("telefone");
 		}
 		private void tipoPessoaToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			showSearchPanel("TipoPessoa");
+			showSearchPanel("tipopessoa");
+		}
+		private void tipoVeículosToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			showSearchPanel("tipoveiculo");
 		}
 		private void veíToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			showSearchPanel("Veiculo");
+			showSearchPanel("veiculo");
 		}
 	}
 }
