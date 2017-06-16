@@ -36,7 +36,10 @@
 			this.sairToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tipoPessoaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mainPanel = new System.Windows.Forms.Panel();
+			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.menuStrip1.SuspendLayout();
+			this.mainPanel.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// menuStrip1
@@ -97,11 +100,20 @@
 			// 
 			// mainPanel
 			// 
+			this.mainPanel.Controls.Add(this.dataGridView1);
 			this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainPanel.Location = new System.Drawing.Point(0, 24);
 			this.mainPanel.Name = "mainPanel";
 			this.mainPanel.Size = new System.Drawing.Size(842, 699);
 			this.mainPanel.TabIndex = 1;
+			// 
+			// dataGridView1
+			// 
+			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridView1.Location = new System.Drawing.Point(181, 312);
+			this.dataGridView1.Name = "dataGridView1";
+			this.dataGridView1.Size = new System.Drawing.Size(240, 150);
+			this.dataGridView1.TabIndex = 0;
 			// 
 			// Inicio
 			// 
@@ -118,6 +130,8 @@
 			this.Text = "APS - Banco de Dados";
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
+			this.mainPanel.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -133,5 +147,6 @@
         private System.Windows.Forms.ToolStripMenuItem veíToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem tipoPessoaToolStripMenuItem;
 		private System.Windows.Forms.Panel mainPanel;
+		private System.Windows.Forms.DataGridView dataGridView1;
 	}
 }

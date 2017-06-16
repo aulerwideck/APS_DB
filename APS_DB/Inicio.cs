@@ -88,10 +88,35 @@ namespace APS_DB
 			}
 			var pnl = new Panel();
 			pnl.Size = new Size(1020, 28);
+			int bx = 100;
+			int of = 70;
 			var btn = new Button();
+			btn.Location = new Point(bx + 0 * of, 0);
+			btn.Size = new Size(of - 10, 23); 
 			btn.Text = "Pesquisar";
 			btn.Click += pesquisar;
 			pnl.Controls.Add(btn);
+
+			btn = new Button();
+			btn.Location = new Point(bx + 1 * of, 0);
+			btn.Size = new Size(of - 10, 23); 
+			btn.Text = "Novo";
+			pnl.Controls.Add(btn);
+
+			btn = new Button();
+			btn.Location = new Point(bx + 2 * of, 0);
+			btn.Size = new Size(of - 10, 23); 
+			btn.Text = "Editar";
+			pnl.Controls.Add(btn);
+
+			btn = new Button();
+			btn.Location = new Point(bx + 3 * of, 0);
+			btn.Size = new Size(of - 10, 23); 
+			btn.Text = "Remover";
+			pnl.Controls.Add(btn);
+
+
+
 			sf.Panel.Controls.Add(pnl);
 
 			pnl = new Panel();
@@ -100,8 +125,17 @@ namespace APS_DB
 			sf.Dgv.Size = new Size(800, 480);
 			sf.Dgv.Dock = DockStyle.Fill;
 			pnl.Controls.Add(sf.Dgv);
+			sf.Dgv.AllowDrop = false;
+			sf.Dgv.AllowUserToAddRows = false;
+			sf.Dgv.AllowUserToDeleteRows = false;
+			sf.Dgv.AllowUserToOrderColumns = false;
+			sf.Dgv.AllowUserToResizeRows = false;
+			sf.Dgv.ReadOnly = true;
+
 			sf.Panel.Controls.Add(pnl);
 			sf.Panel.Visible = false;
+
+
 			forms.Add(name, sf);
 			mainPanel.Controls.Add(sf.Panel);
 		}
@@ -112,6 +146,10 @@ namespace APS_DB
 			var sf = forms[current];
 			var res = banco.getTipoPessoa();
 			sf.Dgv.DataSource = res;
+			foreach (DataGridViewColumn column in sf.Dgv.Columns)
+			{
+				column.SortMode = DataGridViewColumnSortMode.NotSortable;
+			}
 		}
 
 		private void pessoasToolStripMenuItem_Click(object sender, EventArgs e)
