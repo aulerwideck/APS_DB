@@ -12,12 +12,12 @@ namespace APS_DB.Classes
 		private string nomeColuna;
 		private Control control;
 
-		public Control Controle { get => control; set => control = value; }
-		public string NomeColuna { get => nomeColuna; set => nomeColuna = value; }
+		public Control Controle { get { return control; } set { control = value; } }
+		public string NomeColuna { get { return nomeColuna; } set { nomeColuna = value; } }
 
 		public searchElement(string nomeCol)
 		{
-			NomeColuna = nomeCol;
+			nomeColuna = nomeCol;
 		}
 	}
 }

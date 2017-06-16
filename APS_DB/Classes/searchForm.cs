@@ -13,11 +13,46 @@ namespace APS_DB.Classes
 		private FlowLayoutPanel panel;
 		private DataGridView dgv;
 
-		public DataGridView Dgv { get => dgv; set => dgv = value; }
-		public string Name { get => name; set => name = value; }
-		public FlowLayoutPanel Panel { get => panel; set => panel = value; }
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
 
-		public void Show() { panel.Visible = true; }
+            set
+            {
+                name = value;
+            }
+        }
+
+        public FlowLayoutPanel Panel
+        {
+            get
+            {
+                return panel;
+            }
+
+            set
+            {
+                panel = value;
+            }
+        }
+
+        public DataGridView Dgv
+        {
+            get
+            {
+                return dgv;
+            }
+
+            set
+            {
+                dgv = value;
+            }
+        }
+
+        public void Show() { panel.Visible = true; }
 		public void Hide() { panel.Visible = false; }
 	}
 }

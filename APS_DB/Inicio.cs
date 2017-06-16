@@ -40,7 +40,7 @@ namespace APS_DB
 			//Configuração de conexão.
 			banco = new Banco();
 			banco.Ip = "localhost";
-			banco.Senha = "admin";
+			banco.Senha = "root";
 			banco.User = "root";
 			banco.Db = "mydb";
 
