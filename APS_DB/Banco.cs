@@ -56,7 +56,7 @@ namespace APS_DB
         {
             return mConn.State == ConnectionState.Open;
         }
-		//select ***
+		//select *
 		public DataTable get(string table, List<KeyValuePair<string, string>> where = null)
 		{
 			if (verificaConexao())
