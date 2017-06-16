@@ -27,6 +27,9 @@ namespace APS_DB
 			meta.Add("TipoPessoa", new searchElement[] { new searchElement("idTipoPessoa"), new searchElement("Descricao") });
 			meta.Add("Pessoa", new searchElement[] { new searchElement("idPessoa"), new searchElement("idTipoPessoa"), new searchElement("RazaoSocial"), new searchElement("CpfCnpj"), new searchElement("RG"), new searchElement("IE"), new searchElement("Email"), new searchElement("DataNasc") });
 			meta.Add("Veiculo", new searchElement[] { new searchElement("idVeiculo"), new searchElement("idModelo") });
+			//meta.Add("Veiculo", new searchElement[] { new searchElement("idVeiculo"), new searchElement("idModelo") });
+			//meta.Add("Veiculo", new searchElement[] { new searchElement("idVeiculo"), new searchElement("idModelo") });
+			//meta.Add("Veiculo", new searchElement[] { new searchElement("idVeiculo"), new searchElement("idModelo") });
 
 			//Configuração de conexão.
 			banco = new Banco();
