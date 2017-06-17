@@ -175,14 +175,7 @@ namespace APS_DB
         }
         private void inserir(object sender, EventArgs e)
         {
-            var m = meta[current];
-            var sf = forms[current];
-            var where = new List<KeyValuePair<string, string>>();
-            foreach (var item in m)
-            {
-                if (!string.IsNullOrEmpty(item.Controle.Text)) where.Add(new KeyValuePair<string, string>(item.NomeColuna, item.Controle.Text));
-            }
-            var res = banco.set(current, where);
+            
         }
         private void limparCampos(object sender, EventArgs e)
 		{
