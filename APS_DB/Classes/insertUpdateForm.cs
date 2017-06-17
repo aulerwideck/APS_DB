@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,19 +13,30 @@ namespace APS_DB.Classes
     {
         private string tableName;
         private Banco banco;
+        private DataRow editData;
+        private List<KeyValuePair<string, string>> pkEdit;
         private column[] data;
         private EventHandler handlerInserido;
         private EventHandler handlerCancelar;
+        private EventHandler handlerEditado;
 
-        public insertUpdateForm(string formName, string tableName, column[] data, Banco banco, EventHandler handlerInserido, EventHandler handlerCancelar)
+        public void Show(DataRow editData)
+        {
+            setUpdateData(editData);
+            Show();
+        }
+
+        public insertUpdateForm(string formName, string tableName, column[] baseData, Banco banco, EventHandler handlerInserido, EventHandler handlerCancelar, EventHandler handlerEditado)
         {
             FormName = formName;
             this.handlerCancelar = handlerCancelar;
             this.handlerInserido = handlerInserido;
+            this.handlerEditado = handlerEditado;
             this.tableName = tableName;
-            this.data = data;
+            data = new column[baseData.Count()];
+            for (int i = 0; i < baseData.Count(); i++) data[i] = new column(baseData[i]);
             this.banco = banco;
-            base.FormName = tableName;
+            FormName = tableName;
             Panel = new FlowLayoutPanel();
             Panel.Anchor = AnchorStyles.Top;
             Panel.Location = new Point(0, 24);
@@ -42,7 +54,7 @@ namespace APS_DB.Classes
                 label.Text = data[i].FriendlyName;
                 var text = new TextBox();
                 data[i].Control = text;
-                //text.Name = "pesquisa" + data[i];
+                text.Name = "insertUpdateFormField" + data[i].Name;
                 text.Location = new Point(100, 3);
                 text.Size = new Size(300, 20);
                 subpnl.Controls.Add(label);
@@ -77,15 +89,52 @@ namespace APS_DB.Classes
             Panel.Controls.Add(pnl);
             Panel.Visible = false;
         }
-        private void salvar(object sender, EventArgs e) {
+        public void setUpdateData(DataRow row)
+        {
+            //var nd = new List<KeyValuePair<string, string>>();
+            var pk = new List<KeyValuePair<string, string>>();
+            editData = row;
+            if (row != null)
+            {
+                for (int i = 0; i < data.Count(); i++)
+                {
+                    var val = row.ItemArray[i].ToString();
+                    if (data[i].IsPrimaryKey)
+                    {
+                        pk.Add(new KeyValuePair<string, string>(data[i].Name, val));
+                    }
+                    else
+                    {
+                        //nd.Add(new KeyValuePair<string, string>(data[i].Name, val));
+                        data[i].Control.Text = val;
+                    }
+                }
+                pkEdit = pk;
+            }
+            else
+            {
+                limpar();
+                pkEdit = null;
+            }
+        }
+        private void salvar(object sender, EventArgs e)
+        {
             var dados = new List<KeyValuePair<string, string>>();
             foreach (var item in data)
             {
                 if (!item.InsertReq) continue;
                 dados.Add(new KeyValuePair<string, string>(item.Name, item.Control.Text));
             }
-            banco.insert(tableName, dados);
-            handlerInserido(sender, e);
+            if (editData == null)
+            {
+                banco.insert(tableName, dados);
+                handlerInserido(sender, e);
+            }
+            else
+            {
+                banco.update(tableName, pkEdit, dados);
+                handlerEditado(sender, e);
+            }
         }
         private void cancelar(object sender, EventArgs e)
         {
@@ -97,6 +146,10 @@ namespace APS_DB.Classes
             handlerCancelar(sender, e);
         }
         private void limparCampos(object sender, EventArgs e)
+        {
+            limpar();
+        }
+        private void limpar()
         {
             foreach (var item in data)
             {

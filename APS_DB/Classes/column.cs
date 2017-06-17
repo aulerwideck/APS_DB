@@ -15,6 +15,7 @@ namespace APS_DB.Classes
         private bool isFK;
         private bool insertReq;
         private bool isSearchField;
+        private bool isPrimaryKey;
         private MySqlType type;
         private int size;
 
@@ -30,12 +31,25 @@ namespace APS_DB.Classes
         public bool IsSearchField { get => isSearchField; set => isSearchField = value; }
         internal MySqlType Type { get => type; set => type = value; }
         public int Size { get => size; set => size = value; }
+        public bool IsPrimaryKey { get => isPrimaryKey; set => isPrimaryKey = value; }
 
+        public column(column c)
+        {
+            name = c.name;
+            friendlyName = c.friendlyName;
+            fkTableName = c.fkTableName;
+            IsFk = c.isFK;
+            insertReq = c.insertReq;
+            isSearchField = c.isSearchField;
+            isPrimaryKey = c.isPrimaryKey;
+            type = c.type;
+            size = c.size;
+        }
         public column(string nomeCol)
         {
             name = nomeCol;
         }
-        public column(string name, string friendlyName = null, bool insertReq = true, MySqlType type = MySqlType.notNeeded, int size = -1, bool isSearchField = false, bool? isFk = null, string fkTableName = null)
+        public column(string name, string friendlyName = null, bool insertReq = true, MySqlType type = MySqlType.notNeeded, int size = -1, bool isSearchField = false, bool? isFk = null, string fkTableName = null, bool isPrimaryKey = false)
         {
             Name = name;
             FriendlyName = string.IsNullOrEmpty(friendlyName) ? name: friendlyName;
@@ -45,6 +59,7 @@ namespace APS_DB.Classes
             IsSearchField = isSearchField;
             IsFk = isFk.HasValue ? isFk.Value : false;
             FkTableName = fkTableName;
+            IsPrimaryKey = isPrimaryKey;
         }
     }
 }

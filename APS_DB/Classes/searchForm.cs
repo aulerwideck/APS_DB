@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace APS_DB.Classes
         private column[] data;
 		private DataGridView dgv;
         private event stringDelegate handlerInserir;
+        private event stringDelegate handlerEditar;
         public delegate void stringDelegate(string name);
         public DataGridView Dgv
         {
@@ -30,12 +32,14 @@ namespace APS_DB.Classes
         }
 
 
-        public searchForm(string formName, string tableName, column[] data, Banco banco, stringDelegate handlerInserir)
+        public searchForm(string formName, string tableName, column[] baseData, Banco banco, stringDelegate handlerInserir, stringDelegate handlerEditar)
         {
             FormName = FormName;
             this.handlerInserir = handlerInserir;
+            this.handlerEditar = handlerEditar;
             this.tableName = tableName;
-            this.data = data;
+            data = new column[baseData.Count()];
+            for (int i = 0; i < baseData.Count(); i++) data[i] = new column(baseData[i]);
             this.banco = banco;
             Panel = new FlowLayoutPanel();
             Panel.Anchor = AnchorStyles.Top;
@@ -53,8 +57,8 @@ namespace APS_DB.Classes
                 label.Location = new Point(3, 6);
                 label.Text = data[i].FriendlyName;
                 var text = new TextBox();
-                data[i].Control = text;
-                //text.Name = "pesquisa" + data[i];
+                this.data[i].Control = text;
+                text.Name = "searchFormField" + data[i].Name;
                 text.Location = new Point(100, 3);
                 text.Size = new Size(300, 20);
                 subpnl.Controls.Add(label);
@@ -83,6 +87,7 @@ namespace APS_DB.Classes
             btn.Location = new Point(bx + 2 * of, 0);
             btn.Size = new Size(of - 10, 23);
             btn.Text = "Editar";
+            btn.Click += editar;
             pnl.Controls.Add(btn);
 
             btn = new Button();
@@ -119,6 +124,15 @@ namespace APS_DB.Classes
             Panel.Visible = false;
         }
 
+        public DataRow getEditData()
+        {
+            if (dgv.CurrentCell != null)
+            {
+                var index = dgv.CurrentCell.RowIndex;
+                return (dgv.DataSource as DataTable).Rows[index];
+            }
+            return null;
+        }
         private void pesquisar(object sender, EventArgs e)
         {
             var where = new List<KeyValuePair<string, string>>();
@@ -145,6 +159,10 @@ namespace APS_DB.Classes
                 if (!item.IsSearchField) continue;
                 item.Control.Text = string.Empty;
             }
+        }
+        private void editar(object sender, EventArgs e)
+        {
+            handlerEditar(tableName);
         }
     }
 }

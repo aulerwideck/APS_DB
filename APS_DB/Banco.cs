@@ -193,6 +193,25 @@ namespace APS_DB
             }
         }
         // UPDATES
+        public void update(string tableName, List<KeyValuePair<string, string>> pk, List<KeyValuePair<string, string>> values)
+        {
+            if (verificaConexao())
+            {
+                var updates = new StringBuilder();
+                var identifier = new StringBuilder();
+                for (int i = 0; i < values.Count; i++)
+                {
+                    updates.Append(string.Format("{0} = \'{1}\'{2}", values[i].Key, values[i].Value, i < values.Count - 1 ? ", " : ""));
+                }
+                for (int i = 0; i < pk.Count; i++)
+                {
+                    /*switch mysqldatatype format*/
+                    identifier.Append(string.Format("{0} = \'{1}\'{2}", pk[i].Key, pk[i].Value, i < pk.Count - 1 ? " AND " : ""));
+                }
+                mCommand = new MySqlCommand(string.Format("UPDATE {0} SET {1} WHERE {2};", tableName, updates.ToString(), identifier.ToString()), mConn);
+                mCommand.ExecuteNonQuery();
+            }
+        }
         public void finalizaFrete(int idFrete,DateTime datafim)
         {
             if (verificaConexao())
