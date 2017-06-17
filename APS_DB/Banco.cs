@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using MySql.Data.MySqlClient;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace APS_DB
 {
@@ -72,8 +73,9 @@ namespace APS_DB
 					{
 						query.Append(string.Format("AND {0} = \"{1}\" ", where[i].Key, where[i].Value));
 					}
-				}
-				mAdapter = new MySqlDataAdapter(query.ToString(), mConn);
+                }
+                Debug.Write(query.ToString());
+                mAdapter = new MySqlDataAdapter(query.ToString(), mConn);
 				mAdapter.Fill(dt);
 				return dt;
 			}
@@ -82,30 +84,6 @@ namespace APS_DB
         //inserts
         public DataTable set(string table, List<KeyValuePair<string, string>> where = null)
         {
-            if (verificaConexao())
-            {
-                DataTable dt = new DataTable();
-                var query = new StringBuilder();
-                query.Append(string.Format("INSERT INTO {0} ", table));
-                if (where != null && where.Count > 0)
-                {
-                    query.Append("(");
-                    for (int i = 0; i < (where.Count)-1; i++)
-                    {
-                        query.Append(string.Format("{0},", where[i].Key));
-                    }
-                    query.Append(string.Format("{0})VALUES ",where[where.Count].Key));
-                    query.Append("(");
-                    for (int i = 0; i < (where.Count) - 1; i++)
-                    {
-                        query.Append(string.Format("{0},", where[i].Value));
-                    }
-                    query.Append(string.Format("{0});", where[where.Count].Value));
-                }
-                mAdapter = new MySqlDataAdapter(query.ToString(), mConn);
-                mAdapter.Fill(dt);
-                return dt;
-            }
             return null;
         }
 

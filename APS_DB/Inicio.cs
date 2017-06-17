@@ -182,7 +182,7 @@ namespace APS_DB
             {
                 if (!string.IsNullOrEmpty(item.Controle.Text)) where.Add(new KeyValuePair<string, string>(item.NomeColuna, item.Controle.Text));
             }
-            var res = banco.get(current, where);
+            var res = banco.set(current, where);
         }
         private void limparCampos(object sender, EventArgs e)
 		{
