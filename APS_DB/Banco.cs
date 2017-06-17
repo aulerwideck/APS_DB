@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace APS_DB
 {
-    class Banco
+    public class Banco
     {
         private string ip = "";
         private string user = "";
@@ -18,6 +18,7 @@ namespace APS_DB
         private string db = "";
         private MySqlConnection mConn;
         private MySqlDataAdapter mAdapter;
+        private MySqlCommand mCommand;
 
         public string Ip
         {
@@ -82,8 +83,25 @@ namespace APS_DB
 			return null;
 		}
         //inserts
-        public DataTable set(string table, List<KeyValuePair<string, string>> where = null)
+        public DataTable insert(string table, List<KeyValuePair<string, string>> data)
         {
+            if (verificaConexao())
+            {
+                var columns = new StringBuilder();
+                var values = new StringBuilder();
+                for (int i = 0; i < data.Count; i++)
+                {
+                    /*switch mysqldatatype format*/
+                    columns.Append(string.Format("{0}{1}", data[i].Key, i < data.Count - 1 ? ", " : ""));
+                }
+                for (int i = 0; i < data.Count; i++)
+                {
+                    /*switch mysqldatatype format*/
+                    values.Append(string.Format("\'{0}\'{1}", data[i].Value, i < data.Count - 1 ? ", " : ""));
+                }
+                mCommand = new MySqlCommand(string.Format("INSERT INTO {0} ({1}) VALUES ({2});", table, columns.ToString(), values.ToString()), mConn);
+                mCommand.ExecuteNonQuery();
+            }
             return null;
         }
 

@@ -8,35 +8,23 @@ using System.Windows.Forms;
 
 namespace APS_DB.Classes
 {
-	public class searchForm : form
-	{
+    class insertUpdateForm : form
+    {
         private string tableName;
         private Banco banco;
         private column[] data;
-		private DataGridView dgv;
-        private event stringDelegate handlerInserir;
-        public delegate void stringDelegate(string name);
-        public DataGridView Dgv
+        private EventHandler handlerInserido;
+        private EventHandler handlerCancelar;
+
+        public insertUpdateForm(string formName, string tableName, column[] data, Banco banco, EventHandler handlerInserido, EventHandler handlerCancelar)
         {
-            get
-            {
-                return dgv;
-            }
-
-            set
-            {
-                dgv = value;
-            }
-        }
-
-
-        public searchForm(string formName, string tableName, column[] data, Banco banco, stringDelegate handlerInserir)
-        {
-            FormName = FormName;
-            this.handlerInserir = handlerInserir;
+            FormName = formName;
+            this.handlerCancelar = handlerCancelar;
+            this.handlerInserido = handlerInserido;
             this.tableName = tableName;
             this.data = data;
             this.banco = banco;
+            base.FormName = tableName;
             Panel = new FlowLayoutPanel();
             Panel.Anchor = AnchorStyles.Top;
             Panel.Location = new Point(0, 24);
@@ -46,7 +34,7 @@ namespace APS_DB.Classes
             Panel.FlowDirection = FlowDirection.LeftToRight;
             for (int i = 0; i < data.Length; i++)
             {
-                if (!data[i].IsSearchField) continue;
+                if (!data[i].InsertReq) continue;
                 var subpnl = new Panel();
                 subpnl.Size = new Size(400, 28);
                 var label = new Label();
@@ -68,81 +56,51 @@ namespace APS_DB.Classes
             var btn = new Button();
             btn.Location = new Point(bx + 0 * of, 0);
             btn.Size = new Size(of - 10, 23);
-            btn.Text = "Pesquisar";
-            btn.Click += pesquisar;
+            btn.Text = "Salvar";
+            btn.Click += salvar;
             pnl.Controls.Add(btn);
 
             btn = new Button();
             btn.Location = new Point(bx + 1 * of, 0);
             btn.Size = new Size(of - 10, 23);
-            btn.Text = "Novo";
-            btn.Click += inserir;
+            btn.Text = "Cancelar";
+            btn.Click += cancelar;
             pnl.Controls.Add(btn);
 
             btn = new Button();
             btn.Location = new Point(bx + 2 * of, 0);
             btn.Size = new Size(of - 10, 23);
-            btn.Text = "Editar";
-            pnl.Controls.Add(btn);
-
-            btn = new Button();
-            btn.Location = new Point(bx + 3 * of, 0);
-            btn.Size = new Size(of - 10, 23);
-            btn.Text = "Remover";
-            pnl.Controls.Add(btn);
-
-            btn = new Button();
-            btn.Location = new Point(bx + 4 * of, 0);
-            btn.Size = new Size(of - 10, 23);
             btn.Text = "Limpar Campos";
             btn.Click += limparCampos;
             pnl.Controls.Add(btn);
 
-
-
-            Panel.Controls.Add(pnl);
-
-            pnl = new Panel();
-            pnl.Size = new Size(800, 480);
-            Dgv = new DataGridView();
-            Dgv.Size = new Size(800, 480);
-            Dgv.Dock = DockStyle.Fill;
-            pnl.Controls.Add(Dgv);
-            Dgv.AllowDrop = false;
-            Dgv.AllowUserToAddRows = false;
-            Dgv.AllowUserToDeleteRows = false;
-            Dgv.AllowUserToOrderColumns = false;
-            Dgv.AllowUserToResizeRows = false;
-            Dgv.ReadOnly = true;
-
             Panel.Controls.Add(pnl);
             Panel.Visible = false;
         }
-
-        private void pesquisar(object sender, EventArgs e)
-        {
-            var where = new List<KeyValuePair<string, string>>();
+        private void salvar(object sender, EventArgs e) {
+            var dados = new List<KeyValuePair<string, string>>();
             foreach (var item in data)
             {
-                if (!item.IsSearchField) continue;
-                if (!string.IsNullOrEmpty(item.Control.Text)) where.Add(new KeyValuePair<string, string>(item.Name, item.Control.Text));
+                if (!item.InsertReq) continue;
+                dados.Add(new KeyValuePair<string, string>(item.Name, item.Control.Text));
             }
-            var res = banco.get(tableName, where);
-            Dgv.DataSource = res;
-            foreach (DataGridViewColumn column in Dgv.Columns)
-            {
-                column.SortMode = DataGridViewColumnSortMode.NotSortable;
-            }
+            banco.insert(tableName, dados);
+            handlerInserido(sender, e);
         }
-        private void inserir(object sender, EventArgs e)
+        private void cancelar(object sender, EventArgs e)
         {
-            handlerInserir(tableName);
+            foreach (var item in data)
+            {
+                if (!item.InsertReq) continue;
+                item.Control.Text = string.Empty;
+            }
+            handlerCancelar(sender, e);
         }
         private void limparCampos(object sender, EventArgs e)
         {
             foreach (var item in data)
             {
-                if (!item.IsSearchField) continue;
+                if (!item.InsertReq) continue;
                 item.Control.Text = string.Empty;
             }
         }

@@ -10,6 +10,5 @@ namespace APS_DB.Classes
 	{
 		text,
 		range,
-
 	}
 }

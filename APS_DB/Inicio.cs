@@ -14,33 +14,79 @@ namespace APS_DB
     public partial class Inicio : Form
     {
 		private Banco banco;
+        private string previous = string.Empty;
 		private string current = string.Empty;
 		//Metadados de tabelas e controles associados.
-		private Dictionary<string, searchElement[]> meta = new Dictionary<string, searchElement[]> {};
+		private Dictionary<string, column[]> meta = new Dictionary<string, column[]> {};
 		//Telas de pesquisa.
-		private Dictionary<string, searchForm> forms = new Dictionary<string, searchForm>();
+		private Dictionary<string, form> forms = new Dictionary<string, form>();
         public Inicio()
         {
             InitializeComponent();
 
-			//Metadados de tabelas.
-			meta.Add("cidade", new searchElement[] { new searchElement("nome") });
-			meta.Add("endereco", new searchElement[] { new searchElement("Rua"), new searchElement("Numero"), new searchElement("Complemento"), new searchElement("Bairro"), new searchElement("CEP") });
-			meta.Add("estado", new searchElement[] { new searchElement("Sigla"), new searchElement("Nome") });
-			meta.Add("frete", new searchElement[] { new searchElement("NumeroCTe") });
-			meta.Add("marca", new searchElement[] { new searchElement("Descricao") });
-			meta.Add("modelo", new searchElement[] { new searchElement("Descricao") });
-			meta.Add("pais", new searchElement[] { new searchElement("Sigla"), new searchElement("Nome") });
-			meta.Add("pessoa", new searchElement[] { new searchElement("RazaoSocial"), new searchElement("CpfCnpj"), new searchElement("RG"), new searchElement("IE"), new searchElement("Email"), new searchElement("DataNasc") });
-			meta.Add("telefone", new searchElement[] { new searchElement("Telefone") });
-			meta.Add("tipopessoa", new searchElement[] { new searchElement("Descricao") });
-			meta.Add("tipoveiculo", new searchElement[] { new searchElement("Descricao") });
-			meta.Add("veiculo", new searchElement[] { new searchElement("Descricao"), new searchElement("Renavam"), new searchElement("Placa"), new searchElement("Tara") });
+            //Metadados de tabelas.
+            meta.Add("cidade", new column[] {
+                new column("id", null, false),
+                new column("estado", "Estado", true, MySqlType.msint, 11, true, true, "estado"),
+                new column("nome", "Nome", true, MySqlType.msvarchar, 45, true, false, null),
+            });
+			meta.Add("endereco", new column[] {
+                new column("idEndereco", null, false),
+                new column("idPessoa", null, true, MySqlType.msint, 11, true, true, "pessoa"),
+                new column("idCidade", null, true, MySqlType.msint, 11, true, true, "cidade"),
+                new column("Rua", null, true, MySqlType.msvarchar, 45, true),
+                new column("Numero", "Número", true, MySqlType.msint, 11, true),
+                new column("Complemento", null, false, MySqlType.msvarchar, 45, true),
+                new column("Bairro", null, true, MySqlType.msvarchar, 45, true),
+                new column("CEP", null, true, MySqlType.mschar, 9, true),
+            });
+			meta.Add("estado", new column[] {
+                new column("id", null, false),
+                new column("nome", "Nome", true, MySqlType.msvarchar, 45, true),
+                new column("sigla", "Sigla", true, MySqlType.msvarchar, 2, true),
+                new column("pais", "País", true, MySqlType.msint, 11, true, true, "pais"),
+            });
+			meta.Add("frete", new column[] {
+                new column("NumeroCTe")
+            });
+			meta.Add("marca", new column[] {
+                new column("Descricao")
+            });
+			meta.Add("modelo", new column[] {
+                new column("Descricao")
+            });
+			meta.Add("pais", new column[] {
+                new column("Sigla"),
+                new column("Nome")
+            });
+			meta.Add("pessoa", new column[] {
+                new column("RazaoSocial"),
+                new column("CpfCnpj"),
+                new column("RG"),
+                new column("IE"),
+                new column("Email"),
+                new column("DataNasc")
+            });
+			meta.Add("telefone", new column[] {
+                new column("Telefone")
+            });
+			meta.Add("tipopessoa", new column[] {
+                new column("Descricao")
+            });
+			meta.Add("tipoveiculo", new column[] {
+                new column("Descricao")
+            });
+			meta.Add("veiculo", new column[] {
+                new column("Descricao"),
+                new column("Renavam"),
+                new column("Placa"),
+                new column("Tara")
+            });
 
 			//Configuração de conexão.
 			banco = new Banco();
 			banco.Ip = "localhost";
-			banco.Senha = "root";
+			banco.Senha = "admin";
 			banco.User = "root";
 			banco.Db = "mydb";
 
@@ -48,145 +94,69 @@ namespace APS_DB
 			banco.abreConexao();
 			var res = banco.verificaConexao();
 		}
-
+        private string getSearchFormName(string table) {
+            return string.Format("searchForm-{0}", table);
+        }
+        private string getInsertFormName(string table)
+        {
+            return string.Format("insertForm-{0}", table);
+        } 
+        private void showSearchPanel(string tableName)
+		{
+            var fname = getSearchFormName(tableName);
+			if (forms.ContainsKey(current))
+			{
+				forms[current].Hide();
+				//current = string.Empty;
+			}
+			if (!forms.ContainsKey(fname))
+			{
+                var form = new searchForm(fname, tableName, meta[tableName], banco, showInsertPanel);
+                forms.Add(fname, form);
+                mainPanel.Controls.Add(form.Panel);
+            }
+			forms[fname].Show();
+            previous = current;
+			current = fname;
+		}
+        private void showInsertPanel(string tableName)
+        {
+            var fname = getInsertFormName(tableName);
+            if (forms.ContainsKey(current))
+            {
+                forms[current].Hide();
+                //current = string.Empty;
+            }
+            if (!forms.ContainsKey(fname))
+            {
+                var form = new insertUpdateForm(fname, tableName, meta[tableName], banco, concluirInsert, cancelarInsert);
+                forms.Add(fname, form);
+                mainPanel.Controls.Add(form.Panel);
+            }
+            forms[fname].Show();
+            previous = current;
+            current = fname;
+        }
+        private void voltar()
+        {
+            forms[current].Hide();
+            forms[previous].Show();
+            current = previous;
+            previous = string.Empty;
+        }
+        #region Events
+        private void concluirInsert(object sender, EventArgs e) {
+            voltar();
+        }
+        private void cancelarInsert(object sender, EventArgs e)
+        {
+            voltar();
+        }
 		private void sairToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
         }
-		private void showSearchPanel(string name)
-		{
-			if (forms.ContainsKey(current))
-			{
-				forms[current].Hide();
-				current = string.Empty;
-			}
-			if (!forms.ContainsKey(name))
-			{
-				generateSearchPanel(name);
-			}
-			forms[name].Show();
-			current = name;
-		}
-		private void generateSearchPanel(string name)
-		{
-			var sf = new searchForm();
-			sf.Name = name;
-			var data = meta[name];
-			sf.Panel = new FlowLayoutPanel();
-			sf.Panel.Anchor = AnchorStyles.Top;
-			sf.Panel.Location = new Point(0, 24);
-			sf.Panel.Padding = new Padding(10);
-			sf.Panel.Dock = DockStyle.Fill;
-			sf.Panel.Visible = true;
-			sf.Panel.FlowDirection = FlowDirection.LeftToRight;
-			for (int i = 0; i < data.Length; i++)
-			{
-				var subpnl = new Panel();
-				subpnl.Size = new Size(400, 28);
-				var label = new Label();
-				label.Location = new Point(3, 6);
-				label.Text = data[i].NomeColuna;
-				var text = new TextBox();
-				data[i].Controle = text;
-				text.Name = "pesquisa" + data[i];
-				text.Location = new Point(100, 3);
-				text.Size = new Size(300, 20);
-				subpnl.Controls.Add(label);
-				subpnl.Controls.Add(text);
-				sf.Panel.Controls.Add(subpnl);
-			}
-			var pnl = new Panel();
-			pnl.Size = new Size(1020, 28);
-			int bx = 100;
-			int of = 70;
-			var btn = new Button();
-			btn.Location = new Point(bx + 0 * of, 0);
-			btn.Size = new Size(of - 10, 23); 
-			btn.Text = "Pesquisar";
-			btn.Click += pesquisar;
-			pnl.Controls.Add(btn);
-
-			btn = new Button();
-			btn.Location = new Point(bx + 1 * of, 0);
-			btn.Size = new Size(of - 10, 23); 
-			btn.Text = "Novo";
-            btn.Click += inserir;
-			pnl.Controls.Add(btn);
-
-			btn = new Button();
-			btn.Location = new Point(bx + 2 * of, 0);
-			btn.Size = new Size(of - 10, 23); 
-			btn.Text = "Editar";
-			pnl.Controls.Add(btn);
-
-			btn = new Button();
-			btn.Location = new Point(bx + 3 * of, 0);
-			btn.Size = new Size(of - 10, 23);
-			btn.Text = "Remover";
-			pnl.Controls.Add(btn);
-
-			btn = new Button();
-			btn.Location = new Point(bx + 4 * of, 0);
-			btn.Size = new Size(of - 10, 23);
-			btn.Text = "Limpar Campos";
-			btn.Click += limparCampos;
-			pnl.Controls.Add(btn);
-
-
-
-			sf.Panel.Controls.Add(pnl);
-
-			pnl = new Panel();
-			pnl.Size = new Size(800, 480);
-			sf.Dgv = new DataGridView();
-			sf.Dgv.Size = new Size(800, 480);
-			sf.Dgv.Dock = DockStyle.Fill;
-			pnl.Controls.Add(sf.Dgv);
-			sf.Dgv.AllowDrop = false;
-			sf.Dgv.AllowUserToAddRows = false;
-			sf.Dgv.AllowUserToDeleteRows = false;
-			sf.Dgv.AllowUserToOrderColumns = false;
-			sf.Dgv.AllowUserToResizeRows = false;
-			sf.Dgv.ReadOnly = true;
-
-			sf.Panel.Controls.Add(pnl);
-			sf.Panel.Visible = false;
-
-
-			forms.Add(name, sf);
-			mainPanel.Controls.Add(sf.Panel);
-		}
-
-        private void pesquisar(object sender, EventArgs e)
-        {
-            var m = meta[current];
-            var sf = forms[current];
-            var where = new List<KeyValuePair<string, string>>();
-            foreach (var item in m)
-            {
-                if (!string.IsNullOrEmpty(item.Controle.Text)) where.Add(new KeyValuePair<string, string>(item.NomeColuna, item.Controle.Text));
-            }
-            var res = banco.get(current, where);
-            sf.Dgv.DataSource = res;
-            foreach (DataGridViewColumn column in sf.Dgv.Columns)
-            {
-                column.SortMode = DataGridViewColumnSortMode.NotSortable;
-            }
-        }
-        private void inserir(object sender, EventArgs e)
-        {
-            
-        }
-        private void limparCampos(object sender, EventArgs e)
-		{
-			var m = meta[current];
-			foreach (var item in m)
-			{
-				item.Controle.Text = string.Empty;
-			}
-		}
-
-		private void cidadesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void cidadesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			showSearchPanel("cidade");
 		}
@@ -234,5 +204,6 @@ namespace APS_DB
 		{
 			showSearchPanel("veiculo");
 		}
-	}
+        #endregion
+    }
 }
