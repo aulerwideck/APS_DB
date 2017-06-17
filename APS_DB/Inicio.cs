@@ -110,6 +110,7 @@ namespace APS_DB
 			btn.Location = new Point(bx + 1 * of, 0);
 			btn.Size = new Size(of - 10, 23); 
 			btn.Text = "Novo";
+            btn.Click += inserir;
 			pnl.Controls.Add(btn);
 
 			btn = new Button();
@@ -156,23 +157,34 @@ namespace APS_DB
 			mainPanel.Controls.Add(sf.Panel);
 		}
 
-		private void pesquisar(object sender, EventArgs e)
-		{
-			var m = meta[current];
-			var sf = forms[current];
-			var where = new List<KeyValuePair<string, string>>();
-			foreach (var item in m)
-			{
-				if (!string.IsNullOrEmpty(item.Controle.Text)) where.Add(new KeyValuePair<string, string>(item.NomeColuna, item.Controle.Text));
-			}
-			var res = banco.get(current, where);
-			sf.Dgv.DataSource = res;
-			foreach (DataGridViewColumn column in sf.Dgv.Columns)
-			{
-				column.SortMode = DataGridViewColumnSortMode.NotSortable;
-			}
-		}
-		private void limparCampos(object sender, EventArgs e)
+        private void pesquisar(object sender, EventArgs e)
+        {
+            var m = meta[current];
+            var sf = forms[current];
+            var where = new List<KeyValuePair<string, string>>();
+            foreach (var item in m)
+            {
+                if (!string.IsNullOrEmpty(item.Controle.Text)) where.Add(new KeyValuePair<string, string>(item.NomeColuna, item.Controle.Text));
+            }
+            var res = banco.get(current, where);
+            sf.Dgv.DataSource = res;
+            foreach (DataGridViewColumn column in sf.Dgv.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+        }
+        private void inserir(object sender, EventArgs e)
+        {
+            var m = meta[current];
+            var sf = forms[current];
+            var where = new List<KeyValuePair<string, string>>();
+            foreach (var item in m)
+            {
+                if (!string.IsNullOrEmpty(item.Controle.Text)) where.Add(new KeyValuePair<string, string>(item.NomeColuna, item.Controle.Text));
+            }
+            var res = banco.get(current, where);
+        }
+        private void limparCampos(object sender, EventArgs e)
 		{
 			var m = meta[current];
 			foreach (var item in m)

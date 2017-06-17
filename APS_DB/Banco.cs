@@ -80,6 +80,35 @@ namespace APS_DB
 			return null;
 		}
         //inserts
+        public DataTable set(string table, List<KeyValuePair<string, string>> where = null)
+        {
+            if (verificaConexao())
+            {
+                DataTable dt = new DataTable();
+                var query = new StringBuilder();
+                query.Append(string.Format("INSERT INTO {0} ", table));
+                if (where != null && where.Count > 0)
+                {
+                    query.Append("(");
+                    for (int i = 0; i < (where.Count)-1; i++)
+                    {
+                        query.Append(string.Format("{0},", where[i].Key));
+                    }
+                    query.Append(string.Format("{0})VALUES ",where[where.Count].Key));
+                    query.Append("(");
+                    for (int i = 0; i < (where.Count) - 1; i++)
+                    {
+                        query.Append(string.Format("{0},", where[i].Value));
+                    }
+                    query.Append(string.Format("{0});", where[where.Count].Value));
+                }
+                mAdapter = new MySqlDataAdapter(query.ToString(), mConn);
+                mAdapter.Fill(dt);
+                return dt;
+            }
+            return null;
+        }
+
         public void insertFrete(int idRemetente, int idDestinatário, int idTomador, int idMotorista, int numCTE, DateTime dataEmissão, double vlCarga, double vlPedagio, double vlFrete, double pesoBruto)
         {
             if (verificaConexao())
