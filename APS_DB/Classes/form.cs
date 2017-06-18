@@ -35,7 +35,7 @@ namespace APS_DB.Classes
                 panel = value;
             }
         }
-        public void Show() { panel.Visible = true; }
+        public virtual void Show() { panel.Visible = true; }
         public void Hide() { panel.Visible = false; }
     }
 }

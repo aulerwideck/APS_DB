@@ -9,15 +9,17 @@ using System.Windows.Forms;
 
 namespace APS_DB.Classes
 {
-	public class searchForm : form
-	{
+    public class searchForm : form
+    {
         private string tableName;
         private Banco banco;
         private column[] data;
-		private DataGridView dgv;
+        private DataGridView dgv;
         private event stringDelegate handlerInserir;
         private event stringDelegate handlerEditar;
+        private event datarowDelegate handlerRemover;
         public delegate void stringDelegate(string name);
+        public delegate void datarowDelegate(DataRow data, string tableName, column[] meta);
         public DataGridView Dgv
         {
             get
@@ -31,13 +33,20 @@ namespace APS_DB.Classes
             }
         }
 
+        public override void Show()
+        {
+            base.Show();
+            pesquisar();
+        }
 
-        public searchForm(string formName, string tableName, column[] baseData, Banco banco, stringDelegate handlerInserir, stringDelegate handlerEditar)
+        public searchForm(string formName, string tableName, column[] baseData, Banco banco, stringDelegate handlerInserir, stringDelegate handlerEditar, datarowDelegate handlerRemover)
         {
             FormName = FormName;
             this.handlerInserir = handlerInserir;
             this.handlerEditar = handlerEditar;
+            this.handlerRemover = handlerRemover;
             this.tableName = tableName;
+
             data = new column[baseData.Count()];
             for (int i = 0; i < baseData.Count(); i++) data[i] = new column(baseData[i]);
             this.banco = banco;
@@ -94,6 +103,7 @@ namespace APS_DB.Classes
             btn.Location = new Point(bx + 3 * of, 0);
             btn.Size = new Size(of - 10, 23);
             btn.Text = "Remover";
+            btn.Click += remover;
             pnl.Controls.Add(btn);
 
             btn = new Button();
@@ -118,13 +128,14 @@ namespace APS_DB.Classes
             Dgv.AllowUserToDeleteRows = false;
             Dgv.AllowUserToOrderColumns = false;
             Dgv.AllowUserToResizeRows = false;
+            Dgv.MultiSelect = false;
             Dgv.ReadOnly = true;
 
             Panel.Controls.Add(pnl);
             Panel.Visible = false;
         }
 
-        public DataRow getEditData()
+        public DataRow getSelectedRow()
         {
             if (dgv.CurrentCell != null)
             {
@@ -134,6 +145,11 @@ namespace APS_DB.Classes
             return null;
         }
         private void pesquisar(object sender, EventArgs e)
+        {
+            pesquisar();
+        }
+
+        private void pesquisar()
         {
             var where = new List<KeyValuePair<string, string>>();
             foreach (var item in data)
@@ -148,9 +164,11 @@ namespace APS_DB.Classes
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
         }
+
         private void inserir(object sender, EventArgs e)
         {
             handlerInserir(tableName);
+            pesquisar();
         }
         private void limparCampos(object sender, EventArgs e)
         {
@@ -163,6 +181,20 @@ namespace APS_DB.Classes
         private void editar(object sender, EventArgs e)
         {
             handlerEditar(tableName);
+            pesquisar();
+        }
+        private void remover(object sender, EventArgs e)
+        {
+            var row = getSelectedRow();
+            if (row == null)
+            {
+                MessageBox.Show("Selecione a entrada a ser removida.");
+            }
+            else
+            {
+                handlerRemover(row, tableName, data);
+                pesquisar();
+            }
         }
     }
 }

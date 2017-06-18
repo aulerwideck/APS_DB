@@ -132,5 +132,27 @@ namespace APS_DB
                 mAdapter = new MySqlDataAdapter("UPDATE frete SET DataEntrega = "+datafim+" where idfrete = "+idFrete, mConn);
             }
         }
+        //REMOVE
+        public int delete(string table, List<KeyValuePair<string, string>> pk)
+        {
+            try
+            {
+                if (verificaConexao())
+                {
+                    var pks = new StringBuilder();
+                    for (int i = 0; i < pk.Count; i++)
+                    {
+                        pks.Append(string.Format("{0} = \'{1}\'{2}", pk[i].Key, pk[i].Value, i < pk.Count - 1 ? " AND " : ""));
+                    }
+                    mCommand = new MySqlCommand(string.Format("DELETE FROM {0} WHERE {1};", table, pks.ToString()), mConn);
+                    return mCommand.ExecuteNonQuery();
+                }
+                return -1;
+            }
+            catch (Exception ex)
+            {
+                return -2;
+            }
+        }
     }
 }

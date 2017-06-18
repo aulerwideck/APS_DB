@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using APS_DB.Classes;
+using System.Linq;
 
 namespace APS_DB
 {
@@ -142,7 +143,7 @@ namespace APS_DB
             }
             if (!forms.ContainsKey(fname))
             {
-                var form = new searchForm(fname, tableName, meta[tableName], banco, novo, editar);
+                var form = new searchForm(fname, tableName, meta[tableName], banco, novo, editar, remover);
                 forms.Add(fname, form);
                 mainPanel.Controls.Add(form.Panel);
             }
@@ -180,7 +181,7 @@ namespace APS_DB
                 forms.Add(fname, form);
                 mainPanel.Controls.Add(form.Panel);
             }
-            var data = (forms[current] as searchForm).getEditData();
+            var data = (forms[current] as searchForm).getSelectedRow();
             if (data != null)
             {
                 (forms[fname] as insertUpdateForm).Show(data);
@@ -198,6 +199,45 @@ namespace APS_DB
             forms[previous].Show();
             current = previous;
             previous = string.Empty;
+        }
+        private void remover(DataRow dr, string table, column[] data)
+        {
+            var pk = new List<KeyValuePair<string, string>>();
+            for (int i = 0; i < data.Count(); i++)
+            {
+                if (data[i].IsPrimaryKey)
+                {
+                    pk.Add(new KeyValuePair<string, string>(data[i].Name, dr.ItemArray[i].ToString()));
+                }
+            }
+            if (meta.Where(x => x.Key != table).Any(x => x.Value.Any(y => y.IsFK && y.FkTableName == table))) {
+                //tem fk
+                if (MessageBox.Show("Esta entrada pode possuir dependências, se excluída, todas as dependências também serão excluídas. Prosseguir?", "Confirmação", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    try
+                    {
+                        if (banco.delete(table, pk) < 0)
+                        {
+                            MessageBox.Show("Ocorreu um erro na operação. O registro possui outras entradas dependentes.");
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Ocorreu um erro na operação. O registro possui outras entradas dependentes.");
+                    }
+                }
+            }
+            else
+            {
+                try
+                {
+                    banco.delete(table, pk);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Ocorreu um erro na operação.");
+                }
+            }
         }
         #region Events
         private void concluirInsert(object sender, EventArgs e)
@@ -264,11 +304,11 @@ namespace APS_DB
         {
             showSearchPanel("veiculo");
         }
-        #endregion
-
         private void freteVeiculoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             showSearchPanel("frete_veiculo");
         }
+        #endregion
+
     }
 }
