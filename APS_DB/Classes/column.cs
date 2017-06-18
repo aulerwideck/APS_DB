@@ -18,7 +18,6 @@ namespace APS_DB.Classes
         private bool isPrimaryKey;
         private MySqlType type;
         private int size;
-
         private Control control;
 
         public string Name
@@ -39,6 +38,10 @@ namespace APS_DB.Classes
         { get { return type; } set { type = value; } }
         public int Size
         { get { return size; } set { size = value; } }
+
+        public Control Control
+        { get { return control; } set { control = value; } }
+
         public column(column c)
         {
             name = c.name;

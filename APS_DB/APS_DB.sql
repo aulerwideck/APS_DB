@@ -1,3 +1,4 @@
+
 -- MySQL Workbench Forward Engineering
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
@@ -46,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Pessoa` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-insert into pessoa (`idTipoPessoa`,`RazaoSocial`,`CpfCpnj`,`RG`,`IE`,`Email`,`DataNasc`) Values
+insert into pessoa (`idTipoPessoa`,`RazaoSocial`,`CpfCnpj`,`RG`,`IE`,`Email`,`DataNasc`) Values
 (1,"a","1","1","","a@a.com","01/01/02"),
 (1,"b","1","1","","a@a.com","01/01/02"),
 (1,"c","1","1","","a@a.com","01/01/03"),

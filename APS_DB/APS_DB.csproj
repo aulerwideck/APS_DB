@@ -89,6 +89,19 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="APS_DB.sql" />
+    <Content Include="Dados\Cidade.sql" />
+    <Content Include="Dados\Endereco.sql" />
+    <Content Include="Dados\Estado.sql" />
+    <Content Include="Dados\Frete.sql" />
+    <Content Include="Dados\Frete_veiculo.sql" />
+    <Content Include="Dados\Marca.sql" />
+    <Content Include="Dados\Modelo.sql" />
+    <Content Include="Dados\Pais.sql" />
+    <Content Include="Dados\Pessoa.sql" />
+    <Content Include="Dados\Telefone.sql" />
+    <Content Include="Dados\TipoPessoa.sql" />
+    <Content Include="Dados\TipoVeiculo.sql" />
+    <Content Include="Dados\Veiculo.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
