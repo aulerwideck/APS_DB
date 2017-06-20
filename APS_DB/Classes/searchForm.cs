@@ -4,7 +4,6 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace APS_DB.Classes
@@ -65,13 +64,45 @@ namespace APS_DB.Classes
                 var label = new Label();
                 label.Location = new Point(3, 6);
                 label.Text = data[i].FriendlyName;
-                var text = new TextBox();
-                this.data[i].Control = text;
-                text.Name = "searchFormField" + data[i].Name;
-                text.Location = new Point(100, 3);
-                text.Size = new Size(300, 20);
+
+                Control control = null;
+                if (!data[i].IsFK)
+                {
+                    var text = new TextBox();
+                    data[i].Control = text;
+                    text.Name = "searchFormField" + data[i].Name;
+                    text.Location = new Point(100, 3);
+                    text.Size = new Size(300, 20);
+                    control = text;
+                }
+                else
+                {
+                    var ddl = new ComboBox();
+                    ddl.DisplayMember = "Text";
+                    ddl.ValueMember = "Value";
+                    data[i].Control = ddl;
+                    ddl.DropDownStyle = ComboBoxStyle.DropDownList;
+                    var ddldata = banco.get(data[i].FkTableName, null, banco.tableLabel[data[i].FkTableName]);
+                    var ddlConvert = new List<comboItem>();
+                    ddlConvert.Add(new comboItem("0", "[Todos]"));
+                    for (int j = 0; j < ddldata.Rows.Count; j++)
+                    {
+                        var sb = new StringBuilder();
+                        for (int k = 0; k < ddldata.Rows[j].ItemArray.Count(); k++)
+                        {
+                            sb.Append(string.Format("{0}{1}", ddldata.Rows[j][k], k + 1 < ddldata.Rows[j].ItemArray.Count() ? " - " : ""));
+                        }
+                        var val = ddldata.Rows[j].ItemArray[0].ToString();
+                        var tex = sb.ToString();
+                        ddlConvert.Add(new comboItem(val, string.IsNullOrEmpty(tex) ? val : tex));
+                    }
+                    ddl.DataSource = ddlConvert;
+                    ddl.Location = new Point(100, 3);
+                    ddl.Size = new Size(300, 20);
+                    control = ddl;
+                }
                 subpnl.Controls.Add(label);
-                subpnl.Controls.Add(text);
+                subpnl.Controls.Add(control);
                 Panel.Controls.Add(subpnl);
             }
             var pnl = new Panel();
@@ -155,7 +186,14 @@ namespace APS_DB.Classes
             foreach (var item in data)
             {
                 if (!item.IsSearchField) continue;
-                if (!string.IsNullOrEmpty(item.Control.Text)) where.Add(new KeyValuePair<string, string>(item.Name, item.Control.Text));
+                if (item.IsFK)
+                {
+                    if ((item.Control as ComboBox).SelectedValue.ToString() != "0") where.Add(new KeyValuePair<string, string>(item.Name, (item.Control as ComboBox).SelectedValue.ToString()));
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(item.Control.Text)) where.Add(new KeyValuePair<string, string>(item.Name, item.Control.Text));
+                }
             }
             var res = banco.get(tableName, where);
             Dgv.DataSource = res;
@@ -175,7 +213,11 @@ namespace APS_DB.Classes
             foreach (var item in data)
             {
                 if (!item.IsSearchField) continue;
-                item.Control.Text = string.Empty;
+                if (item.IsFK)
+                {
+                    (item.Control as ComboBox).SelectedIndex = 0;
+                }
+                else item.Control.Text = string.Empty;
             }
         }
         private void editar(object sender, EventArgs e)

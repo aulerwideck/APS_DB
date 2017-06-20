@@ -52,13 +52,45 @@ namespace APS_DB.Classes
                 var label = new Label();
                 label.Location = new Point(3, 6);
                 label.Text = data[i].FriendlyName;
-                var text = new TextBox();
-                data[i].Control = text;
-                text.Name = "insertUpdateFormField" + data[i].Name;
-                text.Location = new Point(100, 3);
-                text.Size = new Size(300, 20);
+
+                Control control = null;
+                if (!data[i].IsFK)
+                {
+                    var text = new TextBox();
+                    data[i].Control = text;
+                    text.Name = "insertUpdateFormField" + data[i].Name;
+                    text.Location = new Point(100, 3);
+                    text.Size = new Size(300, 20);
+                    control = text;
+                }
+                else
+                {
+                    var ddl = new ComboBox();
+                    ddl.DisplayMember = "Text";
+                    ddl.ValueMember = "Value";
+                    data[i].Control = ddl;
+                    ddl.DropDownStyle = ComboBoxStyle.DropDownList;
+                    var ddldata = banco.get(data[i].FkTableName, null, banco.tableLabel[data[i].FkTableName]);
+                    var ddlConvert = new List<comboItem>();
+                    //ddlConvert.Add(new comboItem("0", "[Todos]"));
+                    for (int j = 0; j < ddldata.Rows.Count; j++)
+                    {
+                        var sb = new StringBuilder();
+                        for (int k = 0; k < ddldata.Rows[j].ItemArray.Count(); k++)
+                        {
+                            sb.Append(string.Format("{0}{1}", ddldata.Rows[j][k], k + 1 < ddldata.Rows[j].ItemArray.Count() ? " - " : ""));
+                        }
+                        var val = ddldata.Rows[j].ItemArray[0].ToString();
+                        var tex = sb.ToString();
+                        ddlConvert.Add(new comboItem(val, string.IsNullOrEmpty(tex) ? val : tex));
+                    }
+                    ddl.DataSource = ddlConvert;
+                    ddl.Location = new Point(100, 3);
+                    ddl.Size = new Size(300, 20);
+                    control = ddl;
+                }
                 subpnl.Controls.Add(label);
-                subpnl.Controls.Add(text);
+                subpnl.Controls.Add(control);
                 Panel.Controls.Add(subpnl);
             }
             var pnl = new Panel();
@@ -98,6 +130,7 @@ namespace APS_DB.Classes
             {
                 for (int i = 0; i < data.Count(); i++)
                 {
+                    if (!data[i].InsertReq) continue;
                     var val = row.ItemArray[i].ToString();
                     if (data[i].IsPrimaryKey)
                     {
@@ -105,8 +138,14 @@ namespace APS_DB.Classes
                     }
                     else
                     {
-                        //nd.Add(new KeyValuePair<string, string>(data[i].Name, val));
-                        data[i].Control.Text = val;
+                        if (data[i].IsFK)
+                        {
+                            (data[i].Control as ComboBox).SelectedValue = val;
+                        }
+                        else
+                        {
+                            data[i].Control.Text = val;
+                        }
                     }
                 }
                 pkEdit = pk;
@@ -123,7 +162,19 @@ namespace APS_DB.Classes
             foreach (var item in data)
             {
                 if (!item.InsertReq) continue;
-                dados.Add(new KeyValuePair<string, string>(item.Name, item.Control.Text));
+                if (item.IsFK)
+                {
+                    dados.Add(new KeyValuePair<string, string>(item.Name, (item.Control as ComboBox).SelectedValue.ToString()));
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(item.Control.Text))
+                    {
+                        MessageBox.Show(string.Format("Preencha o campo: {0}", item.FriendlyName));
+                        return;
+                    }
+                    dados.Add(new KeyValuePair<string, string>(item.Name, item.Control.Text));
+                }
             }
             if (editData == null)
             {
@@ -154,7 +205,11 @@ namespace APS_DB.Classes
             foreach (var item in data)
             {
                 if (!item.InsertReq) continue;
-                item.Control.Text = string.Empty;
+                if (item.IsFK)
+                {
+                    (item.Control as ComboBox).SelectedIndex = 0;
+                }
+                else item.Control.Text = string.Empty;
             }
         }
     }

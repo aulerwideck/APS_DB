@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Banco.cs" />
+    <Compile Include="Classes\comboItem.cs" />
     <Compile Include="Classes\FieldType.cs" />
     <Compile Include="Classes\column.cs" />
     <Compile Include="Classes\form.cs" />

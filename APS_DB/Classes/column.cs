@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace APS_DB.Classes
 {
     public class column
     {
+        public List<comboItem> src;
         private string name;
         private string friendlyName;
         private string fkTableName;
