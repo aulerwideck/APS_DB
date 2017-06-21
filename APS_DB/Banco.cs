@@ -40,7 +40,7 @@ namespace APS_DB
             tableLabel.Add("marca", new List<string> { "idMarca", "descricao" });
             tableLabel.Add("modelo", new List<string> { "idModelo", "descricao" });
             tableLabel.Add("pais", new List<string> { "idPais", "nome" });
-            tableLabel.Add("pessoa", new List<string> { "idPessoa", "CpfCnpj" });
+            tableLabel.Add("pessoa", new List<string> { "idPessoa", "RazaoSocial" });
             tableLabel.Add("telefone", new List<string> { "idTelefone", "Telefone" });
             tableLabel.Add("tipopessoa", new List<string> { "idTipoPessoa", "Descricao" });
             tableLabel.Add("tipoveiculo", new List<string> { "idTipoVeiculo", "Descricao" });
@@ -71,7 +71,7 @@ namespace APS_DB
             meta.Add("frete", new column[] {
                 new column("idFrete", null, false, MySqlType.notNeeded, -1, false, null, null, true),
                 new column("idPessoaRemetente", "Remetente", true, MySqlType.msint, 11, true, true, "pessoa"),
-                new column("dPessoaDestinatario", "Destinatário", true, MySqlType.msint, 11, true, true, "pessoa"),
+                new column("idPessoaDestinatario", "Destinatário", true, MySqlType.msint, 11, true, true, "pessoa"),
                 new column("idPessoaTomador", "Tomador", true, MySqlType.msint, 11, true, true, "pessoa"),
                 new column("idPessoaMotorista", "Motorista", true, MySqlType.msint, 11, true, true, "pessoa"),
                 new column("NumeroCTe", "Número CTe", true, MySqlType.msint, 11, true),
@@ -104,9 +104,9 @@ namespace APS_DB
             });
             meta.Add("pessoa", new column[] {
                 new column("idPessoa",null,false, MySqlType.notNeeded, -1, false, null, null, true),
-                new column("idTipoPessoa",null,true,MySqlType.msint,11,true,true,"tipopessoa"),
+                new column("idTipoPessoa","Tipo Pessoa",true,MySqlType.msint,11,true,true,"tipopessoa"),
                 new column("RazaoSocial","Razão Social",true,MySqlType.msvarchar,45,true),
-                new column("CpfCnpj",null,true,MySqlType.msvarchar,14,true),
+                new column("CpfCnpj","CPF / CNPJ",true,MySqlType.msvarchar,14,true),
                 new column("RG",null,false,MySqlType.msvarchar,11,true),
                 new column("IE","Inscrição Estadual",false,MySqlType.msvarchar,15,true),
                 new column("Email",null,false,MySqlType.msvarchar,45,true),
@@ -132,8 +132,8 @@ namespace APS_DB
                 new column("Renavam",null,true,MySqlType.msvarchar,45,true),
                 new column("Placa",null,true,MySqlType.msvarchar,45,true),
                 new column("Tara",null,true,MySqlType.msvarchar,45,true),
-                new column("CapacidadeKg",null,false,MySqlType.msvarchar,45,true),
-                new column("CapacidadeM3",null,false,MySqlType.msvarchar,45,true)
+                new column("CapacidadeKg","Capacidade em Kg",false,MySqlType.msvarchar,45,true),
+                new column("CapacidadeM3","Capacidade em M³",false,MySqlType.msvarchar,45,true)
             });
         }
         public string Ip
