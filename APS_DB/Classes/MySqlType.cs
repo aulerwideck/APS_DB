@@ -14,5 +14,6 @@ namespace APS_DB.Classes
         msdate,
         mschar,
         msvarchar,
+        msboolean
     }
 }

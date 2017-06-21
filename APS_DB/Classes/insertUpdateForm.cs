@@ -56,12 +56,24 @@ namespace APS_DB.Classes
                 Control control = null;
                 if (!data[i].IsFK)
                 {
-                    var text = new TextBox();
-                    data[i].Control = text;
-                    text.Name = "insertUpdateFormField" + data[i].Name;
-                    text.Location = new Point(100, 3);
-                    text.Size = new Size(300, 20);
-                    control = text;
+                    if (data[i].Type == MySqlType.msboolean)
+                    {
+                        var text = new CheckBox();
+                        data[i].Control = text;
+                        text.Name = "insertUpdateFormField" + data[i].Name;
+                        text.Location = new Point(100, 3);
+                        text.Size = new Size(300, 20);
+                        control = text;
+                    }
+                    else
+                    {
+                        var text = new TextBox();
+                        data[i].Control = text;
+                        text.Name = "insertUpdateFormField" + data[i].Name;
+                        text.Location = new Point(100, 3);
+                        text.Size = new Size(300, 20);
+                        control = text;
+                    }
                 }
                 else
                 {
@@ -135,18 +147,6 @@ namespace APS_DB.Classes
                     {
                         pk.Add(new KeyValuePair<string, string>(data[i].Name, val));
                     }
-                    /*else
-                    {
-                        if (!data[i].InsertReq) continue;
-                        if (data[i].IsFK)
-                        {
-                            (data[i].Control as ComboBox).SelectedValue = val;
-                        }
-                        else
-                        {
-                            data[i].Control.Text = val;
-                        }
-                    }*/
                 }
                 pkEdit = pk;
                 var rawData = banco.get(tableName, pkEdit, null, true);
@@ -159,6 +159,15 @@ namespace APS_DB.Classes
                         if (data[i].IsFK)
                         {
                             (data[i].Control as ComboBox).SelectedValue = val;
+                        }
+                        else if (data[i].Type == MySqlType.msboolean)
+                        {
+                            (data[i].Control as CheckBox).Checked = val.ToLower() == "true" ? true : false;
+                        }
+                        else if (data[i].Type == MySqlType.msdate)
+                        {
+                            var sp = val.Split(new char[] { ' ' });
+                            data[i].Control.Text = sp[0];
                         }
                         else
                         {
@@ -182,6 +191,10 @@ namespace APS_DB.Classes
                 if (item.IsFK)
                 {
                     dados.Add(new KeyValuePair<string, string>(item.Name, (item.Control as ComboBox).SelectedValue.ToString()));
+                }
+                else if (item.Type == MySqlType.msboolean)
+                {
+                    dados.Add(new KeyValuePair<string, string>(item.Name, (item.Control as CheckBox).Checked ? "True" : "False"));
                 }
                 else
                 {
@@ -225,6 +238,10 @@ namespace APS_DB.Classes
                 if (item.IsFK)
                 {
                     (item.Control as ComboBox).SelectedIndex = 0;
+                }
+                else if (item.Type == MySqlType.msboolean)
+                {
+                    (item.Control as CheckBox).Checked = false;
                 }
                 else item.Control.Text = string.Empty;
             }

@@ -81,7 +81,7 @@ namespace APS_DB
                 new column("VlPedagio", "Valor Pedágio", false, MySqlType.msdouble, -1, true),
                 new column("VlFrete", "Valor Frete", true, MySqlType.msdouble, -1, true),
                 new column("PesoBruto", "Peso Bruto", false, MySqlType.msdouble, -1, true),
-                new column("Finalizado", null, true, MySqlType.mstinyint, -1, true),
+                new column("Finalizado", null, true, MySqlType.msboolean, -1, true),
             });
             meta.Add("frete_veiculo", new column[] {
                 new column("idFrete", "Frete", true, MySqlType.msint, 11, true, true, "frete",true),
@@ -166,7 +166,7 @@ namespace APS_DB
         }
         public void abreConexao()
         {
-            mConn = new MySqlConnection("Persist Security Info=False;server="+ip+";database="+db+";uid="+user+";server = "+ip+"; database = "+db+"; uid = "+user+"; pwd = "+senha+"");
+            mConn = new MySqlConnection("Persist Security Info=False;server=" + ip + ";database=" + db + ";uid=" + user + ";server = " + ip + "; database = " + db + "; uid = " + user + "; pwd = " + senha + "");
             mConn.Open();
         }
 
@@ -176,11 +176,11 @@ namespace APS_DB
         }
         //select *
         public DataTable get(string table, List<KeyValuePair<string, string>> where = null, List<string> select = null, bool rawData = false)
-		{
-			if (verificaConexao())
-			{
-				DataTable dt = new DataTable();
-				var query = new StringBuilder();
+        {
+            if (verificaConexao())
+            {
+                DataTable dt = new DataTable();
+                var query = new StringBuilder();
 
                 var selects = new StringBuilder();
                 var joins = new Dictionary<string, StringBuilder>();
@@ -216,7 +216,7 @@ namespace APS_DB
                         }
                         else
                         {
-                            selects.Append(string.Format("{0}.{1} as '{2}'{3}", table, meta[table][i].Name, meta[table][i].FriendlyName , i + 1 < meta[table].Count() ? ", " : ""));
+                            selects.Append(string.Format("{0}.{1} as '{2}'{3}", table, meta[table][i].Name, meta[table][i].FriendlyName, i + 1 < meta[table].Count() ? ", " : ""));
                         }
                     }
                     foreach (var item in joins)
@@ -225,22 +225,22 @@ namespace APS_DB
                     }
                 }
                 query.Append(string.Format("SELECT {0} FROM {1} {2} ", selects.ToString(), table, joinsSt.ToString()));
-				if (where != null && where.Count > 0)
-				{
-					query.Append("WHERE ");
-					query.Append(string.Format("{2}.{0} = \"{1}\" ", where[0].Key, where[0].Value, table));
-					for (int i = 1; i < where.Count; i++)
-					{
-						query.Append(string.Format("AND {2}.{0} = \"{1}\" ", where[i].Key, where[i].Value, table));
-					}
+                if (where != null && where.Count > 0)
+                {
+                    query.Append("WHERE ");
+                    query.Append(string.Format("{2}.{0} = \"{1}\" ", where[0].Key, where[0].Value, table));
+                    for (int i = 1; i < where.Count; i++)
+                    {
+                        query.Append(string.Format("AND {2}.{0} = \"{1}\" ", where[i].Key, where[i].Value, table));
+                    }
                 }
                 Debug.Write(query.ToString());
                 mAdapter = new MySqlDataAdapter(query.ToString(), mConn);
-				mAdapter.Fill(dt);
-				return dt;
-			}
-			return null;
-		}
+                mAdapter.Fill(dt);
+                return dt;
+            }
+            return null;
+        }
         //inserts
         public DataTable insert(string table, List<KeyValuePair<string, string>> data)
         {
@@ -264,7 +264,7 @@ namespace APS_DB
             return null;
         }
         // UPDATES
-        public void update(string tableName, List<KeyValuePair<string, string>> pk, List<KeyValuePair<string, string>> values)
+        public bool update(string tableName, List<KeyValuePair<string, string>> pk, List<KeyValuePair<string, string>> values)
         {
             if (verificaConexao())
             {
@@ -272,23 +272,47 @@ namespace APS_DB
                 var identifier = new StringBuilder();
                 for (int i = 0; i < values.Count; i++)
                 {
-                    updates.Append(string.Format("{0} = \'{1}\'{2}", values[i].Key, values[i].Value, i < values.Count - 1 ? ", " : ""));
+                    var col = meta[tableName].First(x => x.Name == values[i].Key);
+                    var val = values[i].Value;
+                    switch (col.Type)
+                    {
+                        case MySqlType.msdate:
+                            var sp = val.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                            if (sp.Count() != 3)
+                            {
+                                return false;
+                            }
+                            else
+                            {
+                                val = string.Format("'{0}-{1}-{2}'", sp[2], sp[1], sp[0]);
+                            }
+                            break;
+                        case MySqlType.msboolean:
+                            break;
+                        default:
+                            val = string.Format("'{0}'", val);
+                            break;
+                    }
+                    updates.Append(string.Format("{0} = {1}{2}", values[i].Key, val, i < values.Count - 1 ? ", " : ""));
                 }
                 for (int i = 0; i < pk.Count; i++)
                 {
                     /*switch mysqldatatype format*/
                     identifier.Append(string.Format("{0} = \'{1}\'{2}", pk[i].Key, pk[i].Value, i < pk.Count - 1 ? " AND " : ""));
                 }
-                mCommand = new MySqlCommand(string.Format("UPDATE {0} SET {1} WHERE {2};", tableName, updates.ToString(), identifier.ToString()), mConn);
+                var q = string.Format("UPDATE {0} SET {1} WHERE {2};", tableName, updates.ToString(), identifier.ToString());
+                mCommand = new MySqlCommand(q, mConn);
                 mCommand.ExecuteNonQuery();
+                return true;
             }
+            return false;
         }
-        public void finalizaFrete(int idFrete,DateTime datafim)
+        public void finalizaFrete(int idFrete, DateTime datafim)
         {
             if (verificaConexao())
             {
                 DataTable dt = new DataTable();
-                mAdapter = new MySqlDataAdapter("UPDATE frete SET DataEntrega = "+datafim+" where idfrete = "+idFrete, mConn);
+                mAdapter = new MySqlDataAdapter("UPDATE frete SET DataEntrega = " + datafim + " where idfrete = " + idFrete, mConn);
             }
         }
         //REMOVE
