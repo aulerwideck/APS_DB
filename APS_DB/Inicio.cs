@@ -115,7 +115,7 @@ namespace APS_DB
             }
             if (banco.meta.Where(x => x.Key != table).Any(x => x.Value.Any(y => y.IsFK && y.FkTableName == table))) {
                 //tem fk
-                if (MessageBox.Show("Esta entrada pode possuir dependências, se excluída, todas as dependências também serão excluídas. Prosseguir?", "Confirmação", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("Deseja mesmo excluir esta tupla?", "Confirmação", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     try
                     {
