@@ -202,7 +202,7 @@ namespace APS_DB.Classes
             Dgv.DataSource = res;
             foreach (DataGridViewColumn column in Dgv.Columns)
             {
-                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+                //column.SortMode = DataGridViewColumnSortMode.NotSortable;
                 column.Frozen = false;
                 column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
