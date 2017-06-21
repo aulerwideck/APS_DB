@@ -149,7 +149,7 @@ namespace APS_DB.Classes
             Panel.Controls.Add(pnl);
 
             pnl = new Panel();
-            pnl.Size = new Size(800, 480);
+            pnl.Size = new Size(800, 400);
             pnl.AutoScroll = true;
             pnl.HorizontalScroll.Enabled = true;
             Dgv = new DataGridView();
@@ -163,6 +163,7 @@ namespace APS_DB.Classes
             Dgv.AllowUserToResizeRows = false;
             Dgv.MultiSelect = false;
             Dgv.ReadOnly = true;
+            Dgv.ScrollBars = ScrollBars.Both;
 
             Panel.Controls.Add(pnl);
             Panel.Visible = false;

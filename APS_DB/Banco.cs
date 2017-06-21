@@ -228,10 +228,10 @@ namespace APS_DB
 				if (where != null && where.Count > 0)
 				{
 					query.Append("WHERE ");
-					query.Append(string.Format("{0} = \"{1}\" ", where[0].Key, where[0].Value));
+					query.Append(string.Format("{2}.{0} = \"{1}\" ", where[0].Key, where[0].Value, table));
 					for (int i = 1; i < where.Count; i++)
 					{
-						query.Append(string.Format("AND {0} = \"{1}\" ", where[i].Key, where[i].Value));
+						query.Append(string.Format("AND {2}.{0} = \"{1}\" ", where[i].Key, where[i].Value, table));
 					}
                 }
                 Debug.Write(query.ToString());
