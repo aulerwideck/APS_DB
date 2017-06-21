@@ -135,7 +135,25 @@ namespace APS_DB.Classes
                     {
                         pk.Add(new KeyValuePair<string, string>(data[i].Name, val));
                     }
-                    else
+                    /*else
+                    {
+                        if (!data[i].InsertReq) continue;
+                        if (data[i].IsFK)
+                        {
+                            (data[i].Control as ComboBox).SelectedValue = val;
+                        }
+                        else
+                        {
+                            data[i].Control.Text = val;
+                        }
+                    }*/
+                }
+                pkEdit = pk;
+                var rawData = banco.get(tableName, pkEdit, null, true);
+                for (int i = 0; i < data.Count(); i++)
+                {
+                    var val = rawData.Rows[0].ItemArray[i].ToString();
+                    if (!data[i].IsPrimaryKey)
                     {
                         if (!data[i].InsertReq) continue;
                         if (data[i].IsFK)
@@ -148,7 +166,6 @@ namespace APS_DB.Classes
                         }
                     }
                 }
-                pkEdit = pk;
             }
             else
             {

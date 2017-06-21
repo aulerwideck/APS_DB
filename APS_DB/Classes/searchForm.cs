@@ -150,6 +150,8 @@ namespace APS_DB.Classes
 
             pnl = new Panel();
             pnl.Size = new Size(800, 480);
+            pnl.AutoScroll = true;
+            pnl.HorizontalScroll.Enabled = true;
             Dgv = new DataGridView();
             Dgv.Size = new Size(800, 480);
             Dgv.Dock = DockStyle.Fill;
@@ -200,6 +202,8 @@ namespace APS_DB.Classes
             foreach (DataGridViewColumn column in Dgv.Columns)
             {
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
+                column.Frozen = false;
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
         }
 

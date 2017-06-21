@@ -175,23 +175,56 @@ namespace APS_DB
             return mConn.State == ConnectionState.Open;
         }
         //select *
-        public DataTable get(string table, List<KeyValuePair<string, string>> where = null, List<string> select = null)
+        public DataTable get(string table, List<KeyValuePair<string, string>> where = null, List<string> select = null, bool rawData = false)
 		{
 			if (verificaConexao())
 			{
 				DataTable dt = new DataTable();
 				var query = new StringBuilder();
 
-                var sb = new StringBuilder();
+                var selects = new StringBuilder();
+                var joins = new Dictionary<string, StringBuilder>();
+                var joinsSt = new StringBuilder();
                 if (select != null && select.Count() > 0)
                 {
                     for (int i = 0; i < select.Count(); i++)
                     {
-                        sb.Append(string.Format("{0}{1}", select[i], i < select.Count() - 1 ? ", " : ""));
+                        selects.Append(string.Format("{0}{1}", select[i], i < select.Count() - 1 ? ", " : ""));
                     }
                 }
-                else sb.Append("*");
-                query.Append(string.Format("SELECT {0} FROM {1} ", sb.ToString(), table));
+                else if (rawData)
+                {
+                    for (int i = 0; i < meta[table].Count(); i++)
+                    {
+                        selects.Append(string.Format("{0}.{1}{2}", table, meta[table][i].Name, i + 1 < meta[table].Count() ? ", " : ""));
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < meta[table].Count(); i++)
+                    {
+                        if (meta[table][i].IsFK)
+                        {
+
+                            var fktable = meta[table][i].FkTableName;
+                            var fkTableLabel = tableLabel[fktable];
+                            var label = fkTableLabel.Count() > 1 ? fkTableLabel[1] : fkTableLabel[0];
+                            var col = meta[fktable].First(x => x.Name.ToLower() == label.ToLower());
+                            var varname = string.Format("{0}{1}", fktable, i);
+                            selects.Append(string.Format("{0}.{1} as '{2}'{3}", varname, label, meta[table][i].FriendlyName, i + 1 < meta[table].Count() ? ", " : ""));
+                            joins.Add(varname, new StringBuilder(string.Format(" join {0} {1} on {1}.{2} = {3}.{4}", fktable, varname, fkTableLabel[0], table, meta[table][i].Name)));
+                        }
+                        else
+                        {
+                            selects.Append(string.Format("{0}.{1} as '{2}'{3}", table, meta[table][i].Name, meta[table][i].FriendlyName , i + 1 < meta[table].Count() ? ", " : ""));
+                        }
+                    }
+                    foreach (var item in joins)
+                    {
+                        joinsSt.Append(item.Value.ToString());
+                    }
+                }
+                query.Append(string.Format("SELECT {0} FROM {1} {2} ", selects.ToString(), table, joinsSt.ToString()));
 				if (where != null && where.Count > 0)
 				{
 					query.Append("WHERE ");
