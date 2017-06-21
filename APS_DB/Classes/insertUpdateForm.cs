@@ -130,7 +130,6 @@ namespace APS_DB.Classes
             {
                 for (int i = 0; i < data.Count(); i++)
                 {
-                    if (!data[i].InsertReq) continue;
                     var val = row.ItemArray[i].ToString();
                     if (data[i].IsPrimaryKey)
                     {
@@ -138,6 +137,7 @@ namespace APS_DB.Classes
                     }
                     else
                     {
+                        if (!data[i].InsertReq) continue;
                         if (data[i].IsFK)
                         {
                             (data[i].Control as ComboBox).SelectedValue = val;
